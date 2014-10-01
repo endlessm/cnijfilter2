@@ -2,7 +2,8 @@ Source: cnijfilter2
 Section: graphics
 Priority: optional
 Maintainer: Canon Inc. <sup-debian@list.canon.co.jp>
-Build-Depends: debhelper (>= 4.0.0), libcupsys2-dev
+Build-Depends: debhelper (>= 4.0.0), autoconf, automake, autotools-dev, libtool,
+               libcupsys2-dev | libcups2-dev, libcupsimage2-dev, libusb-1.0-0-dev, libxml2-dev
 Standards-Version: 3.7.2
 
 Package: cnijfilter2
