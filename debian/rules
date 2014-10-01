@@ -13,6 +13,7 @@
 COMMON_PKG=cnijfilter2
 
 CFLAGS = -Wall -g
+SHELL = /bin/bash
 
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
 	CFLAGS += -O0
