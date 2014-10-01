@@ -1,0 +1,15 @@
+rastertocanonij    --- CUPS filter for Canon Inkjet Printer.
+
+DESCRIPTION
+    The "rastertocanonij" is the CUPS filter program converting cupsraster 
+	to the Canon Inkjet Printer command stream.
+
+REQUIREMENTS
+    You need the following libraries.
+    * libcups               (1.7.0 or above)
+
+    And you need the following programs.
+    * CUPS                  (1.7.0 or above)
+
+INSTALLATION
+    See the file "INSTALL"

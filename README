@@ -1,0 +1,42 @@
+x
+How to build rpm:
+=================
+    * When you build one printer driver package.
+    --------------------------------------------
+    $ rpmbuild -tb cnijfilter-source-X.XX-Y.tar.gz --define="MODEL [Printer Model Name]" --define="MODEL_NUM [Printer Model ID]" --with build_common_package	
+
+
+    * When you build plural printer driver packages.
+    ------------------------------------------------
+	step 1)
+    $ rpmbuild -tc cnijfilter-source-X.XX-Y.tar.gz --with prepare_fastbuild
+	step 2)
+    $ rpmbuild -tb cnijfilter-source-X.XX-Y.tar.gz --with fastbuild --define="MODEL [Printer Model Name]" --define="MODEL_NUM [Printer Model ID]" --with build_common_package	
+	step 3) and after step 3)
+    $ rpmbuild -tb cnijfilter-source-X.XX-Y.tar.gz --with fastbuild --define="MODEL [Printer Model Name]" --define="MODEL_NUM [Printer Model ID]"
+
+    You can set the following [Printer Model Name]/[Printer Model ID].
+        [Printer Model Name]        [Printer Model ID]
+    ------------------------------------------------------------------
+         mg7100                      423
+         mg6500                      424
+         mg6400                      425
+         mg5500                      426
+         mg3500                      427
+         mg2400                      428
+         mg2500                      429
+         p200                        430
+
+
+Example:
+========
+    * Example for build MG7100 package:
+	----------------------------------
+    $ rpmbuild -tb cnijfilter-source-X.XX-Y.tar.gz --define="MODEL mg7100" --define="MODEL_NUM 423" --with build_common_package	
+
+    * Example for build MG7100/MG6500/MG6400 packages:
+	-----------------------------------------------
+    $ rpmbuild -tc cnijfilter-source-X.XX-Y.tar.gz --with prepare_fastbuild
+    $ rpmbuild -tb cnijfilter-source-X.XX-Y.tar.gz --with fastbuild --define="MODEL mg7100" --define="MODEL_NUM 423" --with build_common_package	
+    $ rpmbuild -tb cnijfilter-source-X.XX-Y.tar.gz --with fastbuild --define="MODEL mg6500" --define="MODEL_NUM 424"	
+    $ rpmbuild -tb cnijfilter-source-X.XX-Y.tar.gz --with fastbuild --define="MODEL mg6400" --define="MODEL_NUM 425"	

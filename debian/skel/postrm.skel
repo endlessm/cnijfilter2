@@ -1,0 +1,22 @@
+#!/bin/sh
+
+_cups_path2=/usr/share/cups/model
+ppd_files="PPD_FILES"
+
+if [ -x /sbin/ldconfig ]; then
+	/sbin/ldconfig
+fi
+# remove cnbp* libs
+for LIBS in libcnnet2 libcnbpcnclapicom2
+do
+	if [ -h /usr/lib/${LIBS}.so ]; then
+		rm -f /usr/lib/${LIBS}.so
+	fi	
+done
+if [ "$1" = 0 ] ; then
+	rmdir -p --ignore-fail-on-non-empty /usr/lib/bjlib
+fi
+# remove symbolic link for ppd
+for f in ${ppd_files}; do
+	rm -f ${_cups_path2}/${f}
+done

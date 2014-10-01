@@ -1,0 +1,14 @@
+tocnpwg   --- Program for Canon Inkjet Printer.
+
+DESCRIPTION
+    The "tocnpwg" is a program to convert into pwgraster from cupsraster.
+
+REQUIREMENTS
+    You need the following libraries.
+    * libcups               (1.7.0 or above)
+
+    And you need the following programs.
+    * CUPS                  (1.7.0 or above)
+
+INSTALLATION
+    See the file "INSTALL"

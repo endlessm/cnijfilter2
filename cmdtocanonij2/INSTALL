@@ -1,0 +1,16 @@
+To build and install cmdtocanonij2:
+
+  1) Building "cmdtocanonij2".
+        ./autogen.sh
+        make
+        make install
+
+     Appendix:
+        * You can also set the following options.
+           --prefix
+
+     Example:
+           ./autogen.sh --prefix=/usr
+           make
+           make install
+

@@ -1,0 +1,63 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-28 17:34+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. LBM_PAPER_NOT_SET
+#: po/keystr.h:2
+msgid "The paper is not set correctly."
+msgstr ""
+
+#. LBM_COVER_OPEN
+#: po/keystr.h:4
+msgid "The printer cover is open."
+msgstr ""
+
+#. LBM_JAM
+#: po/keystr.h:6
+msgid "A paper jam has occurred."
+msgstr ""
+
+#. LBM_CHK_PRINTER
+#: po/keystr.h:8
+msgid "Check the printer."
+msgstr ""
+
+#. LBM_ERROR_CODE
+#: po/keystr.h:10
+#, c-format
+msgid "Support Code: %s"
+msgstr ""
+
+#. LBM_PREPARING
+#: po/keystr.h:12
+msgid "Preparing for printing..."
+msgstr ""
+
+#. LBM_CANT_COMM_PRINT
+#: po/keystr.h:14
+msgid "Cannot communicate with the printer."
+msgstr ""
+
+#. LBM_BUSY
+#: po/keystr.h:16
+msgid "The printer is busy."
+msgstr ""
+
+#. LBM_PRINTING
+#: po/keystr.h:18
+msgid "Printing..."
+msgstr ""

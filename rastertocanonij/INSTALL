@@ -1,0 +1,6 @@
+To build and install rastertocanonij:
+
+  Building "rastertocanonij".
+        ./autogen.sh --prefix=/usr --enable-progpath=/usr/local/bin
+        make
+        make install

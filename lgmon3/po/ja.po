@@ -1,0 +1,62 @@
+# Inkjet Printer Driver for Linux
+# Copyright CANON INC. 2013-2014
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: cnijlgmon2 4.10\n"
+"POT-Creation-Date: 2013-03-28 17:34+0900\n"
+"PO-Revision-Date: 2013-10-08 14:07+0900\n"
+"Last-Translator: CANON INC.\n"
+"Language-Team: CANON INC.\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n."
+
+
+
+#. LBM_PAPER_NOT_SET
+#: po/keystr.h:2
+msgid "The paper is not set correctly."
+msgstr "用紙が正しくセットされていません。"
+
+#. LBM_COVER_OPEN
+#: po/keystr.h:4
+msgid "The printer cover is open."
+msgstr "プリンターのカバーが開いています。"
+
+#. LBM_JAM
+#: po/keystr.h:6
+msgid "A paper jam has occurred."
+msgstr "用紙が詰まりました。"
+
+#. LBM_CHK_PRINTER
+#: po/keystr.h:8
+msgid "Check the printer."
+msgstr "プリンターを確認してください。"
+
+#. LBM_ERROR_CODE
+#: po/keystr.h:10
+#, c-format
+msgid "Support Code: %s"
+msgstr "サポート番号 : %s"
+
+#. LBM_PREPARING
+#: po/keystr.h:12
+msgid "Preparing for printing..."
+msgstr "プリントの準備中です..."
+
+#. LBM_CANT_COMM_PRINT
+#: po/keystr.h:14
+msgid "Cannot communicate with the printer."
+msgstr "プリンターと通信できません。"
+
+#. LBM_BUSY
+#: po/keystr.h:16
+msgid "The printer is busy."
+msgstr "プリンターは動作中です。"
+
+#. LBM_PRINTING
+#: po/keystr.h:18
+msgid "Printing..."
+msgstr "プリント中..."
+

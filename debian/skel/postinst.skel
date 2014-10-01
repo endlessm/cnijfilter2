@@ -1,0 +1,16 @@
+#!/bin/sh
+
+_cups_path1=/usr/share/ppd
+_cups_path2=/usr/share/cups/model
+ppd_files="PPD_FILES"
+
+if [ -x /sbin/ldconfig ]; then
+	/sbin/ldconfig
+fi
+# make symbolic link for ppd
+if [ ! -d ${_cups_path2} ]; then
+	mkdir ${_cups_path2}
+fi
+for f in ${ppd_files}; do
+	ln -fs ${_cups_path1}/${f} ${_cups_path2}/${f}
+done

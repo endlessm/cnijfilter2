@@ -1,0 +1,23 @@
+cnijbe2    --- CUPS USB/Network backend for Canon Inkjet Printer Driver for Linux
+
+
+DESCRIPTION
+    The "cnijbe2" is the CUPS backend program for USB and network.
+    This program forks the "lgmon*" process to comminicate with the printer.
+
+REQUIREMENTS
+    You need the following libraries.
+    * libcups                 (1.1.x or above)
+
+    And you need the following programs.
+    * CUPS                    (1.1.14 or above)
+
+INSTALLATION
+    See the file "INSTALL"
+
+LICENSE
+    See the file "LICENSE.canon.txt" which is the license terms for the
+    programs made by Canon, and "LICENSE.txt" which is the original license
+    terms for the usb backend program derived from the code made 
+    by Easy Software Products.
+

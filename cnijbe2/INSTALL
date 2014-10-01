@@ -1,0 +1,16 @@
+To build and install backend(USB):
+
+    ./autogen.sh
+    make
+    make install
+
+
+     Appendix:
+        * You can also set the following options.
+           --prefix
+ 
+     Example:
+           ./autogen.sh --prefix=/usr --enable-progpath=/usr/local/bin
+           make
+           make install
+
