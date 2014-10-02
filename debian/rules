@@ -38,17 +38,17 @@ configure-stamp:
 	ln -sf `basename com/libs_bin${_arc}/libcnbpcnclapicom2.so.*` com/libs_bin${_arc}/libcnbpcnclapicom2.so
 
 	### configure 
-	@echo "######## configure cmdtocanonij2"; \
+	@echo "######## configure cmdtocanonij2"
 	cd ./cmdtocanonij2; ./autogen.sh --prefix=/usr --datadir=/usr/share LDFLAGS="-L../../com/libs_bin${_arc}"
-	@echo "######## configure cnijbe2"; \
+	@echo "######## configure cnijbe2"
 	cd ./cnijbe2; ./autogen.sh --prefix=/usr --enable-progpath=/usr/bin
-	@echo "######## configure lgmon3"; \
+	@echo "######## configure lgmon3"
 	cd ./lgmon3; ./autogen.sh --prefix=/usr --enable-progpath=/usr/bin --enable-libpath=/usr/lib/bjlib2 --datadir=/usr/share LDFLAGS="-L../../com/libs_bin${_arc}"
-	@echo "######## rastertocanonij"; \
+	@echo "######## rastertocanonij"
 	cd ./rastertocanonij; ./autogen.sh --prefix=/usr --enable-progpath=/usr/bin
-	@echo "######## tocanonij"; \
+	@echo "######## tocanonij"
 	cd ./tocanonij; ./autogen.sh --prefix=/usr --enable-progpath=/usr/bin
-	@echo "######## tocnpwg"; \
+	@echo "######## tocnpwg"
 	cd ./tocnpwg; ./autogen.sh --prefix=/usr --enable-progpath=/usr/bin
 
 	touch configure-stamp
@@ -77,27 +77,27 @@ install: build
 	dh_installdirs
 
 	### install common package
-	@echo "######## make install cmdtocanonij2"; \
+	@echo "######## make install cmdtocanonij2"
 	cd ./cmdtocanonij2; make clean; make; make install DESTDIR=$(CURDIR)/debian/${COMMON_PKG}
-	@echo "######## make install cnijbe2"; \
+	@echo "######## make install cnijbe2"
 	cd ./cnijbe2; make clean; make; make install DESTDIR=$(CURDIR)/debian/${COMMON_PKG}
-	@echo "######## make install lgmon3"; \
+	@echo "######## make install lgmon3"
 	cd ./lgmon3; make clean; make; make install DESTDIR=$(CURDIR)/debian/${COMMON_PKG} 
-	@echo "######## make install rastertocanonij"; \
+	@echo "######## make install rastertocanonij"
 	cd ./rastertocanonij; make clean; make; make install DESTDIR=$(CURDIR)/debian/${COMMON_PKG}
-	@echo "######## make install tocanonij"; \
+	@echo "######## make install tocanonij"
 	cd ./tocanonij; make clean; make; make install DESTDIR=$(CURDIR)/debian/${COMMON_PKG}
-	@echo "######## make install tocnpwg"; \
+	@echo "######## make install tocnpwg"
 	cd ./tocnpwg; make clean; make; make install DESTDIR=$(CURDIR)/debian/${COMMON_PKG}
 
-	@echo "######## install library ini ppd"; \
-	mkdir -p $(CURDIR)/debian/${COMMON_PKG}/usr/lib/bjlib2; \
-	install -c -m 644 -o lp -g lp com/ini/cnnet.ini $(CURDIR)/debian/${COMMON_PKG}/usr/lib/bjlib2; \
-	mkdir -p $(CURDIR)/debian/${COMMON_PKG}/usr/lib; \
-	install -c -m 755 com/libs_bin${_arc}/libcnnet2.so.* $(CURDIR)/debian/${COMMON_PKG}/usr/lib; \
-	install -c -m 755 com/libs_bin${_arc}/libcnbpcnclapicom2.so.* $(CURDIR)/debian/${COMMON_PKG}/usr/lib; \
-	mkdir -p $(CURDIR)/debian/${COMMON_PKG}/usr/share/ppd; \
-	install -c -m 644 -o lp -g lp ppd/*.ppd $(CURDIR)/debian/${COMMON_PKG}/usr/share/ppd; \
+	@echo "######## install library ini ppd"
+	mkdir -p $(CURDIR)/debian/${COMMON_PKG}/usr/lib/bjlib2
+	install -c -m 644 -o lp -g lp com/ini/cnnet.ini $(CURDIR)/debian/${COMMON_PKG}/usr/lib/bjlib2
+	mkdir -p $(CURDIR)/debian/${COMMON_PKG}/usr/lib
+	install -c -m 755 com/libs_bin${_arc}/libcnnet2.so.* $(CURDIR)/debian/${COMMON_PKG}/usr/lib
+	install -c -m 755 com/libs_bin${_arc}/libcnbpcnclapicom2.so.* $(CURDIR)/debian/${COMMON_PKG}/usr/lib
+	mkdir -p $(CURDIR)/debian/${COMMON_PKG}/usr/share/ppd
+	install -c -m 644 -o lp -g lp ppd/*.ppd $(CURDIR)/debian/${COMMON_PKG}/usr/share/ppd
 
 	# Add here commands to install the package into debian/cnijfilter-common.
 	#$(MAKE) install DESTDIR=$(CURDIR)/debian/cnijfilter-common
