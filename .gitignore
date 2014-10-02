@@ -31,10 +31,19 @@ missing
 stamp-h1
 
 # Binaries
+cmdtocanonij2/filter/cmdtocanonij2
+cnijbe2/src/cnijbe2
+lgmon3/m4/
+lgmon3/src/cnijlgmon3
+rastertocanonij/src/rastertocanonij
+tocanonij/src/tocanonij
+tocnpwg/src/tocnpwg
 
 # Debian files
 /debian/*.debhelper.log
 /debian/*.substvars
+/debian/cnijfilter2/
 /debian/files
+/debian/printer-driver-cnijfilter2/
 build-stamp
 configure-stamp
