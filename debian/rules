@@ -33,6 +33,10 @@ configure-stamp:
 	dh_testdir
 	# Add here commands to configure the package.
 
+	### library symlinks
+	ln -sf `basename com/libs_bin${_arc}/libcnnet2.so.*` com/libs_bin${_arc}/libcnnet2.so
+	ln -sf `basename com/libs_bin${_arc}/libcnbpcnclapicom2.so.*` com/libs_bin${_arc}/libcnbpcnclapicom2.so
+
 	### configure 
 	@echo "######## configure cmdtocanonij2"; \
 	cd ./cmdtocanonij2; ./autogen.sh --prefix=/usr --datadir=/usr/share LDFLAGS="-L../../com/libs_bin${_arc}"
@@ -59,6 +63,7 @@ clean:
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp configure-stamp
+	rm -f com/libs_bin*/*.so
 
 	# Add here commands to clean up after the build process.
 	-$(MAKE) clean
