@@ -95,7 +95,9 @@ install: build
 	install -c -m 644 -o lp -g lp com/ini/cnnet.ini $(CURDIR)/debian/${COMMON_PKG}/usr/lib/bjlib2
 	mkdir -p $(CURDIR)/debian/${COMMON_PKG}/usr/lib
 	install -c -m 755 com/libs_bin${_arc}/libcnnet2.so.* $(CURDIR)/debian/${COMMON_PKG}/usr/lib
+	cp -P com/libs_bin${_arc}/libcnnet2.so $(CURDIR)/debian/${COMMON_PKG}/usr/lib
 	install -c -m 755 com/libs_bin${_arc}/libcnbpcnclapicom2.so.* $(CURDIR)/debian/${COMMON_PKG}/usr/lib
+	cp -P com/libs_bin${_arc}/libcnbpcnclapicom2.so $(CURDIR)/debian/${COMMON_PKG}/usr/lib
 	mkdir -p $(CURDIR)/debian/${COMMON_PKG}/usr/share/ppd
 	install -c -m 644 -o lp -g lp ppd/*.ppd $(CURDIR)/debian/${COMMON_PKG}/usr/share/ppd
 
