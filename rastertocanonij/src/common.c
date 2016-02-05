@@ -1,7 +1,6 @@
 /*
  *  CUPS add-on module for Canon Inkjet Printer.
- *  Copyright CANON INC. 2014
- *  All Rights Reserved.
+ *  Copyright CANON INC. 2001-2015
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,18 +20,20 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#define BUF_SIZE  1024
+
 /*-------------------------------------------------------------------------------
  * GetExecProgPath
  * Get execute program path
 -------------------------------------------------------------------------------*/
 char *GetExecProgPath( void )
 {
-    static char buf[1024]={};
-    char path[256];
+    static char buf[BUF_SIZE]={};
+    char path[BUF_SIZE];
 	int len = 0;
 	char *result = NULL;
 
-    sprintf( path, "/proc/%d/exe", getpid() );
+    snprintf( path, BUF_SIZE, "/proc/%d/exe", getpid() );
     readlink( path, buf, sizeof(buf)-1 );
 
 	len = strlen(buf);

@@ -1,7 +1,6 @@
 /*
  *  CUPS add-on module for Canon Inkjet Printer.
- *  Copyright CANON INC. 2014
- *  All Rights Reserved.
+ *  Copyright CANON INC. 2001-2015
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -67,7 +66,9 @@ int GetPrinterSettings( cups_option_t *p_cups_opt, int num_opt, ParamList **p_li
 		}
 
 		if ( p_choice != NULL ){
-			strcpy( choice, p_choice->choice );
+			//strcpy( choice, p_choice->choice );
+			strncpy( choice, p_choice->choice, BUF_SIZE );
+			choice[BUF_SIZE -1] = '\0';
 			//to_lower_except_size_X(choice);
 			param_list_add( &local_p_list, p_table->opt_key, choice, strlen(choice) + 1 );
 			numCnt++;
@@ -103,12 +104,12 @@ int GetPrinterableAreaOptionFromPPD( const char *size_str, ParamList **p_list, i
 	}
 
 	memset( num_buf,  0x00,  sizeof(num_buf) );
-	sprintf( num_buf, "%ld", width );
+	snprintf( num_buf, BUF_SIZE, "%ld", width );
 	param_list_add( &local_p_list, "--printable_width", num_buf, strlen(num_buf) + 1 );
 	numCnt++;
 
 	memset( num_buf,  0x00, sizeof(num_buf) );
-	sprintf( num_buf, "%ld", height );
+	snprintf( num_buf, BUF_SIZE, "%ld", height );
 	param_list_add( &local_p_list, "--printable_height", num_buf, strlen(num_buf) + 1 );
 	numCnt++;
 

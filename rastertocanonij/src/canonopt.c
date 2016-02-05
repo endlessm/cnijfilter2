@@ -1,7 +1,6 @@
 /*
  *  CUPS add-on module for Canon Inkjet Printer.
- *  Copyright CANON INC. 2014
- *  All Rights Reserved.
+ *  Copyright CANON INC. 2001-2015
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -107,15 +106,17 @@ PpdToOptKey *alloc_opt_key_table(char *ppd_name)
 						{
 							int ppd_len = strlen(ppd_key) + 1;
 							int opt_len = strlen(opt_key) + 1;
+							int total_size = ppd_len + opt_len;
 
-							p_table->ppd_key = (char*)malloc(ppd_len + opt_len);
+							p_table->ppd_key = (char*)malloc(total_size);
 
 							if( p_table->ppd_key != NULL )
 							{
 								p_table->opt_key = p_table->ppd_key + ppd_len;
 
- 								strcpy(p_table->ppd_key, ppd_key);
-								strcpy(p_table->opt_key, opt_key);
+ 								strncpy(p_table->ppd_key, ppd_key, ppd_len);
+								strncpy(p_table->opt_key, opt_key, opt_len);
+								p_table->ppd_key[total_size -1] = '\0';
 								p_table++;
 							}
 						}
@@ -217,7 +218,9 @@ SizeToPrintArea *alloc_size_to_print_area_table(char *ppd_name)
 
 							if( p_table->size_key != NULL )
 							{
- 								strcpy(p_table->size_key, size_key);
+ 								//strcpy(p_table->size_key, size_key);
+ 								strncpy(p_table->size_key, size_key, size_len);
+ 								p_table->size_key[size_len -1] = '\0';
 								p_table->width = w;
 								p_table->height = h;
 								p_table++;
