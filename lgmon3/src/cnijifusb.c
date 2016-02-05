@@ -1,6 +1,6 @@
 /*
  *  Canon Inkjet Printer Driver for Linux
- *  Copyright CANON INC. 2013
+ *  Copyright CANON INC. 2001-2015
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -45,6 +45,7 @@
 #include "cnijifusb.h"
 
 //#define _DEBUG_MODE_
+#define PRINTER_ALTERNATIVE_NUM 0
 
 static struct libusb_device **g_list = NULL;				/* device list */
 static struct libusb_device *g_device = NULL;				/* usb device */
@@ -478,7 +479,7 @@ int CNIF_USB_Discover()
 					for(altNum = 0; altNum < iptr->num_altsetting; altNum++){
 						altptr = iptr->altsetting + altNum;
 					    
-						if(altptr->bInterfaceClass == LIBUSB_CLASS_PRINTER){
+						if(altptr->bInterfaceClass == LIBUSB_CLASS_PRINTER && altptr->bAlternateSetting == PRINTER_ALTERNATIVE_NUM){
 							
 						    g_num[1] = altptr->bInterfaceNumber;
 						    g_claimed_interface[g_usblp_attached] = altptr->bInterfaceNumber;

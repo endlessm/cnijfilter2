@@ -1,7 +1,6 @@
 /*
  *  CUPS add-on module for Canon Inkjet Printer.
- *  Copyright CANON INC. 2014
- *  All Rights Reserved.
+ *  Copyright CANON INC. 2001-2015
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -56,6 +55,7 @@
 #define TOCNIJ_BIN	"tocanonij"
 //#define TOCNIJ_PATH	"/usr/local/bin/tocanonij"
 
+#define CUSTOM_PAGESIZE_STR "PageSize=Custom"
 
 int g_filter_pid = -1;
 int g_signal_received = 0;
@@ -178,9 +178,9 @@ static int MakeExecCommand( char *cmd_buf, int cmd_buf_size, ParamList *p_list, 
 		}
 	}
 
-	//strncpy( cmd_buf, tmp_buf, cmd_buf_size );
-	//cmd_buf[cmd_buf_size -1] = '\0';
-	strcpy( cmd_buf, tmp_buf );
+	strncpy( cmd_buf, tmp_buf, cmd_buf_size );
+	cmd_buf[cmd_buf_size -1] = '\0';
+	//strcpy( cmd_buf, tmp_buf );
 
 	/* Set tocnpwg option */
 	list_array[0] = p_list;
@@ -271,9 +271,15 @@ int main(int argc, char *argv[])
 	}
 
 	if( argv[5] != NULL ) {
-		num_opt = cupsParseOptions(argv[5], 0, &p_cups_opt);
-		if( num_opt < 0 ) {
-			fputs("DEBUG:[rastertocanonij] illegal option.\n", stderr);
+		if ( strstr( argv[5], CUSTOM_PAGESIZE_STR ) == NULL ){
+			num_opt = cupsParseOptions(argv[5], 0, &p_cups_opt);
+			if( num_opt < 0 ) {
+				fputs("DEBUG:[rastertocanonij] illegal option.\n", stderr);
+				goto onErr1;
+			}
+		}
+		else {
+			/* If PageSize is CustomSize, exit as error. */
 			goto onErr1;
 		}
 	}

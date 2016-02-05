@@ -1,5 +1,5 @@
 # Inkjet Printer Driver for Linux
-# Copyright CANON INC. 2013-2014
+# Copyright CANON INC. 2001-2015
 #
 msgid ""
 msgstr ""

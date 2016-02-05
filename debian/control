@@ -3,7 +3,7 @@ Section: graphics
 Priority: optional
 Maintainer: Canon Inc. <sup-debian@list.canon.co.jp>
 Build-Depends: debhelper (>= 4.0.0), autoconf, automake, autotools-dev,
-               libtool, libcupsys2-dev | libcups2-dev, libcupsimage2-dev,
+               libtool-bin, libcupsys2-dev | libcups2-dev, libcupsimage2-dev,
                libusb-1.0-0-dev, libxml2-dev, libglib2.0-dev
 Standards-Version: 3.7.2
 

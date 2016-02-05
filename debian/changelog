@@ -1,3 +1,21 @@
+cnijfilter2 (5.20endless1) eos; urgency=medium
+
+  * Rebased again the latest release.
+
+  [endlessm/eos-shell#6341]
+
+ -- Mario Sanchez Prada <mario@endlessm.com>  Fri, 05 Feb 2016 12:33:18 +0000
+
+cnijfilter2 (5.20-1) stable; urgency=low
+  * Initial Release.
+
+ -- Canon Inc. <sup-debian@list.canon.co.jp>  Fri, 7 Aug 2015 12:00:00 +0900
+
+cnijfilter2 (5.10-1) stable; urgency=low
+  * Initial Release.
+
+ -- Canon Inc. <sup-debian@list.canon.co.jp>  Fri, 23 Jan 2015 12:00:00 +0900
+
 cnijfilter2 (5.00endless1) eos; urgency=low
 
   * Adjust debian packaging to build on Endless.

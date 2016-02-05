@@ -3,7 +3,7 @@
 ##############################################################################
 ##
 ##  Canon Inkjet Printer Driver for Linux
-##  Copyright CANON INC. 2001-2014
+##  Copyright CANON INC. 2001-2015
 ##
 ##  This program is free software; you can redistribute it and/or modify
 ##  it under the terms of the GNU General Public License as published by
@@ -20,12 +20,11 @@
 ##
 ##############################################################################
 
-C_version="5.00-1"
-C_copyright_end="2014"
+C_version="5.20-1"
+C_copyright_end="2015"
 C_default_system="deb"
 
-P_support_printer=("MG7500" "MG6600" "MG5600" "MG2900" "MB2000" "MB2300" "IB4000" "MB5000" "MB5300" "IP110" "E460")
-
+P_support_printer=("MG7700" "MG6900" "MG6800" "MG5700" "MG3600")
 
 L_INST_COM_01_01="Command executed = %s\n"
 
