@@ -1,7 +1,7 @@
 #!/bin/sh
 
 _cups_path2=/usr/share/cups/model
-ppd_files="canone480.ppd canonip110.ppd canonmg5700.ppd canonmg6600.ppd canonmx490.ppd canonmg3600.ppd canone460.ppd canonmg7500.ppd canonmg6800.ppd canonmg7700.ppd canonmb5300.ppd canonmg6900.ppd canonmg5600.ppd canonmb2300.ppd canonmg2900.ppd canonmb5000.ppd canonmb2000.ppd canonib4000.ppd "
+ppd_files="canone480.ppd canonip110.ppd canonmg5700.ppd canonmg6600.ppd canonmx490.ppd canonmg3600.ppd canone460.ppd canonmg7500.ppd canonmg6800.ppd canonmg7700.ppd canonmb5300.ppd canong3000.ppd canonmg6900.ppd canonmg5600.ppd canonmb2300.ppd canonmg2900.ppd canonmb5000.ppd canonmb2000.ppd canonib4000.ppd "
 
 if [ -x /sbin/ldconfig ]; then
 	/sbin/ldconfig

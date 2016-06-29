@@ -1,3 +1,16 @@
+cnijfilter2 (5.30-1endless1) eos; urgency=medium
+
+  * Rebased again the latest release.
+
+  https://phabricator.endlessm.com/T12141
+
+ -- Mario Sanchez Prada <mario@endlessm.com>  Wed, 29 Jun 2016 15:29:00 +0100
+
+cnijfilter2 (5.30-1) stable; urgency=low
+  * Initial Release.
+
+ -- Canon Inc. <sup-debian@list.canon.co.jp>  Wed, 20 Jan 2016 12:00:00 +0900
+
 cnijfilter2 (5.20endless1) eos; urgency=medium
 
   * Rebased again the latest release.
