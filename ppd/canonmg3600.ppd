@@ -1,6 +1,6 @@
 *PPD-Adobe: "4.3"
 *%  CUPS add-on PPD file for Canon Inkjet Printer Driver.
-*%  Copyright CANON INC. 2001-2015
+*%  Copyright CANON INC. 2001-2016
 *%
 *%  This program is free software; you can redistribute it and/or modify
 *%  it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@
 
 *ModelName: "Canon MG3600 series"
 *ShortNickName: "MG3600 series"
-*NickName: "Canon MG3600 series Ver.5.20"
+*NickName: "Canon MG3600 series Ver.5.30"
 *PCFileName: "CANONMG3600.PPD"
 *Product: "(mg3600)"
 
@@ -511,70 +511,92 @@
 
 *CloseGroup: *CNGeneral
 
-*UIConstraints: *MediaType plain *PageSize 4x6.bl
-*UIConstraints: *MediaType plain *PageSize 5x7.bl
 *UIConstraints: *MediaType plain *PageSize Letter.bl
 *UIConstraints: *MediaType plain *PageSize A4.bl
-*UIConstraints: *MediaType plain *PageSize Postcard.bl
+*UIConstraints: *MediaType plain *PageSize 4x6.bl
+*UIConstraints: *MediaType plain *PageSize 5x7.bl
+*UIConstraints: *MediaType plain *PageSize 8x10.bl
 *UIConstraints: *MediaType plain *PageSize l.bl
 *UIConstraints: *MediaType plain *PageSize 2l.bl
-*UIConstraints: *MediaType plain *PageSize 8x10.bl
-*UIConstraints: *MediaType photopaper *Duplex DuplexNoTumble
-*UIConstraints: *MediaType photopaper *Duplex DuplexTumble
+*UIConstraints: *MediaType plain *PageSize Postcard.bl
 *UIConstraints: *MediaType glossygold *Duplex DuplexNoTumble
 *UIConstraints: *MediaType glossygold *Duplex DuplexTumble
 *UIConstraints: *MediaType proplatinum *Duplex DuplexNoTumble
 *UIConstraints: *MediaType proplatinum *Duplex DuplexTumble
+*UIConstraints: *MediaType luster *Duplex DuplexNoTumble
+*UIConstraints: *MediaType luster *Duplex DuplexTumble
 *UIConstraints: *MediaType semigloss *Duplex DuplexNoTumble
 *UIConstraints: *MediaType semigloss *Duplex DuplexTumble
-*UIConstraints: *MediaType highres *Duplex DuplexNoTumble
-*UIConstraints: *MediaType highres *Duplex DuplexTumble
-*UIConstraints: *MediaType highres *PageSize 4x6.bl
-*UIConstraints: *MediaType highres *PageSize 5x7.bl
-*UIConstraints: *MediaType highres *PageSize Letter.bl
-*UIConstraints: *MediaType highres *PageSize A4.bl
-*UIConstraints: *MediaType highres *PageSize Postcard.bl
-*UIConstraints: *MediaType highres *PageSize l.bl
-*UIConstraints: *MediaType highres *PageSize 2l.bl
-*UIConstraints: *MediaType highres *PageSize 8x10.bl
-*UIConstraints: *MediaType ijpostcard *Duplex DuplexNoTumble
-*UIConstraints: *MediaType ijpostcard *Duplex DuplexTumble
-*UIConstraints: *MediaType postcard *Duplex DuplexNoTumble
-*UIConstraints: *MediaType postcard *Duplex DuplexTumble
 *UIConstraints: *MediaType glossypaper *Duplex DuplexNoTumble
 *UIConstraints: *MediaType glossypaper *Duplex DuplexTumble
 *UIConstraints: *MediaType matte *Duplex DuplexNoTumble
 *UIConstraints: *MediaType matte *Duplex DuplexTumble
-*UIConstraints: *MediaType luster *Duplex DuplexNoTumble
-*UIConstraints: *MediaType luster *Duplex DuplexTumble
+*UIConstraints: *MediaType photopaper *Duplex DuplexNoTumble
+*UIConstraints: *MediaType photopaper *Duplex DuplexTumble
 *UIConstraints: *MediaType envelope *Duplex DuplexNoTumble
 *UIConstraints: *MediaType envelope *Duplex DuplexTumble
-*UIConstraints: *MediaType envelope *PageSize 4x6.bl
-*UIConstraints: *MediaType envelope *PageSize 5x7.bl
 *UIConstraints: *MediaType envelope *PageSize Letter.bl
 *UIConstraints: *MediaType envelope *PageSize A4.bl
-*UIConstraints: *MediaType envelope *PageSize Postcard.bl
+*UIConstraints: *MediaType envelope *PageSize 4x6.bl
+*UIConstraints: *MediaType envelope *PageSize 5x7.bl
+*UIConstraints: *MediaType envelope *PageSize 8x10.bl
 *UIConstraints: *MediaType envelope *PageSize l.bl
 *UIConstraints: *MediaType envelope *PageSize 2l.bl
-*UIConstraints: *MediaType envelope *PageSize 8x10.bl
+*UIConstraints: *MediaType envelope *PageSize Postcard.bl
+*UIConstraints: *MediaType ijpostcard *Duplex DuplexNoTumble
+*UIConstraints: *MediaType ijpostcard *Duplex DuplexTumble
+*UIConstraints: *MediaType postcard *Duplex DuplexNoTumble
+*UIConstraints: *MediaType postcard *Duplex DuplexTumble
+*UIConstraints: *MediaType highres *Duplex DuplexNoTumble
+*UIConstraints: *MediaType highres *Duplex DuplexTumble
+*UIConstraints: *MediaType highres *PageSize Letter.bl
+*UIConstraints: *MediaType highres *PageSize A4.bl
+*UIConstraints: *MediaType highres *PageSize 4x6.bl
+*UIConstraints: *MediaType highres *PageSize 5x7.bl
+*UIConstraints: *MediaType highres *PageSize 8x10.bl
+*UIConstraints: *MediaType highres *PageSize l.bl
+*UIConstraints: *MediaType highres *PageSize 2l.bl
+*UIConstraints: *MediaType highres *PageSize Postcard.bl
 *UIConstraints: *MediaType photo *Duplex DuplexNoTumble
 *UIConstraints: *MediaType photo *Duplex DuplexTumble
-*UIConstraints: *PageSize 4x6.bl *Duplex DuplexNoTumble
-*UIConstraints: *PageSize 4x6.bl *Duplex DuplexTumble
-*UIConstraints: *PageSize 5x7.bl *Duplex DuplexNoTumble
-*UIConstraints: *PageSize 5x7.bl *Duplex DuplexTumble
 *UIConstraints: *PageSize Letter.bl *Duplex DuplexNoTumble
 *UIConstraints: *PageSize Letter.bl *Duplex DuplexTumble
+*UIConstraints: *PageSize legal *Duplex DuplexNoTumble
+*UIConstraints: *PageSize legal *Duplex DuplexTumble
+*UIConstraints: *PageSize A5 *Duplex DuplexNoTumble
+*UIConstraints: *PageSize A5 *Duplex DuplexTumble
 *UIConstraints: *PageSize A4.bl *Duplex DuplexNoTumble
 *UIConstraints: *PageSize A4.bl *Duplex DuplexTumble
-*UIConstraints: *PageSize Postcard.bl *Duplex DuplexNoTumble
-*UIConstraints: *PageSize Postcard.bl *Duplex DuplexTumble
-*UIConstraints: *PageSize l.bl *Duplex DuplexNoTumble
-*UIConstraints: *PageSize l.bl *Duplex DuplexTumble
-*UIConstraints: *PageSize 2l.bl *Duplex DuplexNoTumble
-*UIConstraints: *PageSize 2l.bl *Duplex DuplexTumble
+*UIConstraints: *PageSize B5 *Duplex DuplexNoTumble
+*UIConstraints: *PageSize B5 *Duplex DuplexTumble
+*UIConstraints: *PageSize 4x6 *Duplex DuplexNoTumble
+*UIConstraints: *PageSize 4x6 *Duplex DuplexTumble
+*UIConstraints: *PageSize 4x6.bl *Duplex DuplexNoTumble
+*UIConstraints: *PageSize 4x6.bl *Duplex DuplexTumble
+*UIConstraints: *PageSize 5x7 *Duplex DuplexNoTumble
+*UIConstraints: *PageSize 5x7 *Duplex DuplexTumble
+*UIConstraints: *PageSize 5x7.bl *Duplex DuplexNoTumble
+*UIConstraints: *PageSize 5x7.bl *Duplex DuplexTumble
+*UIConstraints: *PageSize 8x10 *Duplex DuplexNoTumble
+*UIConstraints: *PageSize 8x10 *Duplex DuplexTumble
 *UIConstraints: *PageSize 8x10.bl *Duplex DuplexNoTumble
 *UIConstraints: *PageSize 8x10.bl *Duplex DuplexTumble
+*UIConstraints: *PageSize l *Duplex DuplexNoTumble
+*UIConstraints: *PageSize l *Duplex DuplexTumble
+*UIConstraints: *PageSize l.bl *Duplex DuplexNoTumble
+*UIConstraints: *PageSize l.bl *Duplex DuplexTumble
+*UIConstraints: *PageSize 2l *Duplex DuplexNoTumble
+*UIConstraints: *PageSize 2l *Duplex DuplexTumble
+*UIConstraints: *PageSize 2l.bl *Duplex DuplexNoTumble
+*UIConstraints: *PageSize 2l.bl *Duplex DuplexTumble
+*UIConstraints: *PageSize Postcard *Duplex DuplexNoTumble
+*UIConstraints: *PageSize Postcard *Duplex DuplexTumble
+*UIConstraints: *PageSize Postcard.bl *Duplex DuplexNoTumble
+*UIConstraints: *PageSize Postcard.bl *Duplex DuplexTumble
+*UIConstraints: *PageSize envelop10p *Duplex DuplexNoTumble
+*UIConstraints: *PageSize envelop10p *Duplex DuplexTumble
+*UIConstraints: *PageSize envelopdlp *Duplex DuplexNoTumble
+*UIConstraints: *PageSize envelopdlp *Duplex DuplexTumble
 
 *%CNPpdToOptKey PageSize --papersize
 *%CNPpdToOptKey MediaType --media
@@ -703,6 +725,6 @@
 *% jbfhfhghphpacgjhngladaiacgjgkhmadgkapaohegnaiaiabapachkhahnadhkhigghagphmhkaigngagjhmangghahdgjac=aaaaecmk
 *% #<CNIJ-DEVCE-INFO
 *%
-*% internalversion : 5.20.20150327.155343
+*% internalversion : 5.30.20151015.183813
 *%
 

@@ -1,6 +1,6 @@
 *PPD-Adobe: "4.3"
 *%  CUPS add-on PPD file for Canon Inkjet Printer Driver.
-*%  Copyright CANON INC. 2001-2014
+*%  Copyright CANON INC. 2001-2016
 *%
 *%  This program is free software; you can redistribute it and/or modify
 *%  it under the terms of the GNU General Public License as published by
@@ -47,15 +47,14 @@
 *HWMargins: 0 0 0 0
 *LeadingEdge Short: ""
 *DefaultLeadingEdge: Short
-*VariablePaperSize: True
-*CustomPageSize True: "pop pop pop <</PageSize [5 -2 roll] /ImagingBBox null>>setpagedevice"
+*VariablePaperSize: False
 
 *DefaultFont: Courier
 *Font Courier: Standard "(001.001)" Standard ROM
 
 *ModelName: "Canon iP110 series"
 *ShortNickName: "iP110 series"
-*NickName: "Canon iP110 series Ver.5.00"
+*NickName: "Canon iP110 series Ver.5.30"
 *PCFileName: "CANONIP110.PPD"
 *Product: "(ip110)"
 
@@ -472,33 +471,15 @@
 
 *CloseGroup: *CNGeneral
 
-*UIConstraints: *MediaType plain *PageSize 4x6.bl
-*UIConstraints: *MediaType plain *PageSize 5x7.bl
 *UIConstraints: *MediaType plain *PageSize Letter.bl
 *UIConstraints: *MediaType plain *PageSize A4.bl
-*UIConstraints: *MediaType plain *PageSize Postcard.bl
+*UIConstraints: *MediaType plain *PageSize 4x6.bl
+*UIConstraints: *MediaType plain *PageSize 5x7.bl
+*UIConstraints: *MediaType plain *PageSize 8x10.bl
 *UIConstraints: *MediaType plain *PageSize l.bl
 *UIConstraints: *MediaType plain *PageSize 2l.bl
+*UIConstraints: *MediaType plain *PageSize Postcard.bl
 *UIConstraints: *MediaType plain *PageSize businesscard.bl
-*UIConstraints: *MediaType plain *PageSize 8x10.bl
-*UIConstraints: *PageSize 4x6.bl *Duplex DuplexNoTumble
-*UIConstraints: *PageSize 4x6.bl *Duplex DuplexTumble
-*UIConstraints: *PageSize 5x7.bl *Duplex DuplexNoTumble
-*UIConstraints: *PageSize 5x7.bl *Duplex DuplexTumble
-*UIConstraints: *PageSize Letter.bl *Duplex DuplexNoTumble
-*UIConstraints: *PageSize Letter.bl *Duplex DuplexTumble
-*UIConstraints: *PageSize A4.bl *Duplex DuplexNoTumble
-*UIConstraints: *PageSize A4.bl *Duplex DuplexTumble
-*UIConstraints: *PageSize Postcard.bl *Duplex DuplexNoTumble
-*UIConstraints: *PageSize Postcard.bl *Duplex DuplexTumble
-*UIConstraints: *PageSize l.bl *Duplex DuplexNoTumble
-*UIConstraints: *PageSize l.bl *Duplex DuplexTumble
-*UIConstraints: *PageSize 2l.bl *Duplex DuplexNoTumble
-*UIConstraints: *PageSize 2l.bl *Duplex DuplexTumble
-*UIConstraints: *PageSize businesscard.bl *Duplex DuplexNoTumble
-*UIConstraints: *PageSize businesscard.bl *Duplex DuplexTumble
-*UIConstraints: *PageSize 8x10.bl *Duplex DuplexNoTumble
-*UIConstraints: *PageSize 8x10.bl *Duplex DuplexTumble
 
 *%CNPpdToOptKey PageSize --papersize
 *%CNPpdToOptKey MediaType --media
@@ -590,6 +571,6 @@
 *% cgjgkhmadgnakalhegnaialalanachkhahnadhkhigghagphmhkaigngagjhmangghahdgjac=aaaadpnc
 *% #<CNIJ-DEVCE-INFO
 *%
-*% internalversion : 5.00.20140624.154650
+*% internalversion : 5.30.20151015.183853
 *%
 

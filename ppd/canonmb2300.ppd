@@ -1,6 +1,6 @@
 *PPD-Adobe: "4.3"
 *%  CUPS add-on PPD file for Canon Inkjet Printer Driver.
-*%  Copyright CANON INC. 2001-2014
+*%  Copyright CANON INC. 2001-2016
 *%
 *%  This program is free software; you can redistribute it and/or modify
 *%  it under the terms of the GNU General Public License as published by
@@ -47,15 +47,14 @@
 *HWMargins: 0 0 0 0
 *LeadingEdge Short: ""
 *DefaultLeadingEdge: Short
-*VariablePaperSize: True
-*CustomPageSize True: "pop pop pop <</PageSize [5 -2 roll] /ImagingBBox null>>setpagedevice"
+*VariablePaperSize: False
 
 *DefaultFont: Courier
 *Font Courier: Standard "(001.001)" Standard ROM
 
 *ModelName: "Canon MB2300 series"
 *ShortNickName: "MB2300 series"
-*NickName: "Canon MB2300 series Ver.5.00"
+*NickName: "Canon MB2300 series Ver.5.30"
 *PCFileName: "CANONMB2300.PPD"
 *Product: "(mb2300)"
 
@@ -398,26 +397,48 @@
 
 *CloseGroup: *CNGeneral
 
-*UIConstraints: *MediaType photopaper *Duplex DuplexNoTumble
-*UIConstraints: *MediaType photopaper *Duplex DuplexTumble
 *UIConstraints: *MediaType glossygold *Duplex DuplexNoTumble
 *UIConstraints: *MediaType glossygold *Duplex DuplexTumble
+*UIConstraints: *MediaType luster *Duplex DuplexNoTumble
+*UIConstraints: *MediaType luster *Duplex DuplexTumble
 *UIConstraints: *MediaType semigloss *Duplex DuplexNoTumble
 *UIConstraints: *MediaType semigloss *Duplex DuplexTumble
-*UIConstraints: *MediaType highres *Duplex DuplexNoTumble
-*UIConstraints: *MediaType highres *Duplex DuplexTumble
-*UIConstraints: *MediaType ijpostcard *Duplex DuplexNoTumble
-*UIConstraints: *MediaType ijpostcard *Duplex DuplexTumble
-*UIConstraints: *MediaType postcard *Duplex DuplexNoTumble
-*UIConstraints: *MediaType postcard *Duplex DuplexTumble
 *UIConstraints: *MediaType glossypaper *Duplex DuplexNoTumble
 *UIConstraints: *MediaType glossypaper *Duplex DuplexTumble
 *UIConstraints: *MediaType matte *Duplex DuplexNoTumble
 *UIConstraints: *MediaType matte *Duplex DuplexTumble
-*UIConstraints: *MediaType luster *Duplex DuplexNoTumble
-*UIConstraints: *MediaType luster *Duplex DuplexTumble
+*UIConstraints: *MediaType photopaper *Duplex DuplexNoTumble
+*UIConstraints: *MediaType photopaper *Duplex DuplexTumble
 *UIConstraints: *MediaType envelope *Duplex DuplexNoTumble
 *UIConstraints: *MediaType envelope *Duplex DuplexTumble
+*UIConstraints: *MediaType ijpostcard *Duplex DuplexNoTumble
+*UIConstraints: *MediaType ijpostcard *Duplex DuplexTumble
+*UIConstraints: *MediaType postcard *Duplex DuplexNoTumble
+*UIConstraints: *MediaType postcard *Duplex DuplexTumble
+*UIConstraints: *MediaType highres *Duplex DuplexNoTumble
+*UIConstraints: *MediaType highres *Duplex DuplexTumble
+*UIConstraints: *PageSize legal *Duplex DuplexNoTumble
+*UIConstraints: *PageSize legal *Duplex DuplexTumble
+*UIConstraints: *PageSize A5 *Duplex DuplexNoTumble
+*UIConstraints: *PageSize A5 *Duplex DuplexTumble
+*UIConstraints: *PageSize B5 *Duplex DuplexNoTumble
+*UIConstraints: *PageSize B5 *Duplex DuplexTumble
+*UIConstraints: *PageSize 4x6 *Duplex DuplexNoTumble
+*UIConstraints: *PageSize 4x6 *Duplex DuplexTumble
+*UIConstraints: *PageSize 5x7 *Duplex DuplexNoTumble
+*UIConstraints: *PageSize 5x7 *Duplex DuplexTumble
+*UIConstraints: *PageSize 8x10 *Duplex DuplexNoTumble
+*UIConstraints: *PageSize 8x10 *Duplex DuplexTumble
+*UIConstraints: *PageSize l *Duplex DuplexNoTumble
+*UIConstraints: *PageSize l *Duplex DuplexTumble
+*UIConstraints: *PageSize 2l *Duplex DuplexNoTumble
+*UIConstraints: *PageSize 2l *Duplex DuplexTumble
+*UIConstraints: *PageSize Postcard *Duplex DuplexNoTumble
+*UIConstraints: *PageSize Postcard *Duplex DuplexTumble
+*UIConstraints: *PageSize envelop10p *Duplex DuplexNoTumble
+*UIConstraints: *PageSize envelop10p *Duplex DuplexTumble
+*UIConstraints: *PageSize envelopdlp *Duplex DuplexNoTumble
+*UIConstraints: *PageSize envelopdlp *Duplex DuplexTumble
 
 *%CNPpdToOptKey PageSize --papersize
 *%CNPpdToOptKey MediaType --media
@@ -575,6 +596,6 @@
 *% khmadgnaiaphegnaialaaaaachkhahnadhkhigghagphmhkaigngagjhmangghahdgjac=aaaadpdn
 *% #<CNIJ-DEVCE-INFO
 *%
-*% internalversion : 5.00.20140624.154631
+*% internalversion : 5.30.20151015.183800
 *%
 
