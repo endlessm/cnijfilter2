@@ -24,6 +24,12 @@ Vendor: CANON INC.
 Group: Applications/Publishing
 Source0: cnijfilter2-source-%{version}-%{release}.tar.gz
 BuildRequires: cups-devel
+# libxml/parser.h:
+BuildRequires: libxml2-devel
+# libusb.h:
+BuildRequires: libusbx-devel
+# usb.h:
+BuildRequires: libusb-devel
 Requires:  cups
 
 
