@@ -1,6 +1,6 @@
 *PPD-Adobe: "4.3"
 *%  CUPS add-on PPD file for Canon Inkjet Printer Driver.
-*%  Copyright CANON INC. 2001-2015
+*%  Copyright CANON INC. 2001-2016
 *%
 *%  This program is free software; you can redistribute it and/or modify
 *%  it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@
 
 *ModelName: "Canon MX490 series"
 *ShortNickName: "MX490 series"
-*NickName: "Canon MX490 series Ver.5.20"
+*NickName: "Canon MX490 series Ver.5.30"
 *PCFileName: "CANONMX490.PPD"
 *Product: "(mx490)"
 
@@ -413,31 +413,21 @@
 
 *CloseGroup: *CNGeneral
 
-*UIConstraints: *MediaType plain *PageSize 4x6.bl
-*UIConstraints: *MediaType plain *PageSize 5x7.bl
 *UIConstraints: *MediaType plain *PageSize Letter.bl
 *UIConstraints: *MediaType plain *PageSize A4.bl
+*UIConstraints: *MediaType plain *PageSize 4x6.bl
+*UIConstraints: *MediaType plain *PageSize 5x7.bl
 *UIConstraints: *MediaType plain *PageSize 8x10.bl
-*UIConstraints: *MediaType highres *PageSize 4x6.bl
-*UIConstraints: *MediaType highres *PageSize 5x7.bl
-*UIConstraints: *MediaType highres *PageSize Letter.bl
-*UIConstraints: *MediaType highres *PageSize A4.bl
-*UIConstraints: *MediaType highres *PageSize 8x10.bl
-*UIConstraints: *MediaType envelope *PageSize 4x6.bl
-*UIConstraints: *MediaType envelope *PageSize 5x7.bl
 *UIConstraints: *MediaType envelope *PageSize Letter.bl
 *UIConstraints: *MediaType envelope *PageSize A4.bl
+*UIConstraints: *MediaType envelope *PageSize 4x6.bl
+*UIConstraints: *MediaType envelope *PageSize 5x7.bl
 *UIConstraints: *MediaType envelope *PageSize 8x10.bl
-*UIConstraints: *PageSize 4x6.bl *Duplex DuplexNoTumble
-*UIConstraints: *PageSize 4x6.bl *Duplex DuplexTumble
-*UIConstraints: *PageSize 5x7.bl *Duplex DuplexNoTumble
-*UIConstraints: *PageSize 5x7.bl *Duplex DuplexTumble
-*UIConstraints: *PageSize Letter.bl *Duplex DuplexNoTumble
-*UIConstraints: *PageSize Letter.bl *Duplex DuplexTumble
-*UIConstraints: *PageSize A4.bl *Duplex DuplexNoTumble
-*UIConstraints: *PageSize A4.bl *Duplex DuplexTumble
-*UIConstraints: *PageSize 8x10.bl *Duplex DuplexNoTumble
-*UIConstraints: *PageSize 8x10.bl *Duplex DuplexTumble
+*UIConstraints: *MediaType highres *PageSize Letter.bl
+*UIConstraints: *MediaType highres *PageSize A4.bl
+*UIConstraints: *MediaType highres *PageSize 4x6.bl
+*UIConstraints: *MediaType highres *PageSize 5x7.bl
+*UIConstraints: *MediaType highres *PageSize 8x10.bl
 
 *%CNPpdToOptKey PageSize --papersize
 *%CNPpdToOptKey MediaType --media
@@ -534,6 +524,6 @@
 *% jhngladakacgjgkhmadhfamaihegnaiakakaiachkhahnadhkhigghagphmhkaigngagjhmangghahdgjac=aaaaebhn
 *% #<CNIJ-DEVCE-INFO
 *%
-*% internalversion : 5.20.20150327.140830
+*% internalversion : 5.30.20151015.183851
 *%
 

@@ -1,6 +1,6 @@
 *PPD-Adobe: "4.3"
 *%  CUPS add-on PPD file for Canon Inkjet Printer Driver.
-*%  Copyright CANON INC. 2001-2014
+*%  Copyright CANON INC. 2001-2016
 *%
 *%  This program is free software; you can redistribute it and/or modify
 *%  it under the terms of the GNU General Public License as published by
@@ -47,15 +47,14 @@
 *HWMargins: 0 0 0 0
 *LeadingEdge Short: ""
 *DefaultLeadingEdge: Short
-*VariablePaperSize: True
-*CustomPageSize True: "pop pop pop <</PageSize [5 -2 roll] /ImagingBBox null>>setpagedevice"
+*VariablePaperSize: False
 
 *DefaultFont: Courier
 *Font Courier: Standard "(001.001)" Standard ROM
 
 *ModelName: "Canon MG2900 series"
 *ShortNickName: "MG2900 series"
-*NickName: "Canon MG2900 series Ver.5.00"
+*NickName: "Canon MG2900 series Ver.5.30"
 *PCFileName: "CANONMG2900.PPD"
 *Product: "(mg2900)"
 
@@ -316,6 +315,6 @@
 *% ladakacgjgkhmadgkalaohegnaialaiaaachkhahnadhkhigghagphmhkangngagjhmalgghahdgjac=aaaaeafj
 *% #<CNIJ-DEVCE-INFO
 *%
-*% internalversion : 5.00.20140624.154638
+*% internalversion : 5.30.20151015.183809
 *%
 
