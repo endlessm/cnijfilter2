@@ -33,9 +33,12 @@
 #include <stdint.h>
 #include <stddef.h>
 
+#include "./common/libcnnet3_type.h"
+
 typedef enum {
 	CNIF_TYPE_USB,
 	CNIF_TYPE_NET,
+	CNIF_TYPE_NET2,
 } CNIF_TYPE;
 
 typedef struct _CNIF_INFO
@@ -50,11 +53,12 @@ int CNIF_Close(CNIF_INFO *_if_info);
 int CNIF_Reset(CNIF_INFO *_if_info);
 int CNIF_Read(CNIF_INFO *_if_info, uint8_t *buffer, size_t bufferSize, size_t *readSize);
 int CNIF_Write(CNIF_INFO *_if_info, uint8_t *buffer, size_t bufferSize, size_t *writtenSize);
+int CNIF_Send(CNIF_INFO *_if_info, uint8_t *buffer, size_t bufferSize, size_t *writtenSize);
 int CNIF_Cancel(CNIF_INFO *_if_info);
 int CNIF_Discover(CNIF_INFO *_if_info, int installer);
 int CNIF_GetSerialNum(CNIF_INFO *if_info, uint8_t *buffer, size_t bufferSize, char *serial);
-
 int CNIF_MakeDeviceUri(CNIF_INFO *if_info, uint8_t *uri_buffer, size_t size);
+int CNIF_KeepSession(CNIF_INFO *_if_info);
 
 #endif
 

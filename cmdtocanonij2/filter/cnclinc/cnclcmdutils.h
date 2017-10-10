@@ -1,6 +1,6 @@
 /*
  *  Canon Inkjet Printer Driver for Linux
- *  Copyright CANON INC. 2001-2016
+ *  Copyright CANON INC. 2001-2014
  * *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -72,5 +72,17 @@ extern int CNCL_GetSendDataPWGRasterCommand( char *jobID,long data_size,long cmd
 extern int CNCL_GetSetPageConfigurationCommand( char *jobID, unsigned short nextpage, void *cmdBuffer, long cmdBufferSize,long *writtenSize );
 extern int CNCL_MakeBJLSetTimeJob(void *cmdBuffer, size_t cmdBufferSize, size_t *writtenSize );
 extern int CNCL_MakeGetCapabilityCommand(char *cmdBuffer, unsigned int cmdBufferSize, unsigned int *writtenSize, int service_type );
+extern int CNCL_GetProtocol(const char *deviceID, size_t length_deviceID);
+// extern int CNCL_MakeCommand_GetStatusPrint( char *cmdBuffer, unsigned int cmdBufferSize, BJVSPTRINTU *writtenSize);
+extern int CNCL_MakeCommand_GetStatusPrint( char *cmdBuffer, unsigned int cmdBufferSize, unsigned int *writtenSize);
+// extern int CNCL_MakeCommand_CancelJob(char *jobID, char *cmdBuffer, unsigned int cmdBufferSize, BJVSPTRINTU *writtenSize);
+extern int CNCL_MakeCommand_CancelJob(char *jobID, char *cmdBuffer, unsigned int cmdBufferSize, unsigned int *writtenSize);
+// extern int CNCL_ParseCapabilityResponsePrint_HostEnv( BJVSVOID *xmlCapabilityPrint, BJVSPTRINTU xmlSize);
+extern int CNCL_ParseCapabilityResponsePrint_HostEnv( void *xmlCapabilityPrint, unsigned int xmlSize);
+// extern int CNCL_MakeCommand_StartJob3(int hostEnvID, char *uuid, char jobID[], void *cmdBuffer, int cmdBufferSize, BJVSPTRINTU *writtenSize);
+extern int CNCL_MakeCommand_StartJob3(int hostEnvID, char *uuid, char jobID[], void *cmdBuffer, int cmdBufferSize, unsigned int *writtenSize);
+extern int CNCL_ParseCapabilityResponsePrint_DateTime(void *xmlCapabilityPrint, int xmlSize);
+// extern int CNCL_MakeCommand_SetJobConfiguration(char jobID[], char datetime[], void *cmdBuffer, int cmdBufferSize, BJVSPTRINTU *writtenSize);
+extern int CNCL_MakeCommand_SetJobConfiguration(char jobID[], char datetime[], void *cmdBuffer, int cmdBufferSize, unsigned int *writtenSize);
 
 #endif  /*  __CNCLCMDUTILS_H__ */

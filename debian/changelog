@@ -1,3 +1,16 @@
+cnijfilter2 (5.40-1endless1) eos; urgency=medium
+
+  * Rebased against the latest release.
+
+  https://phabricator.endlessm.com/T19563
+
+ -- Sam Spilsbury <sam@endlessm.com>  Wed, 11 Oct 2017 00:07:52 +0800
+
+cnijfilter2 (5.40-1) stable; urgency=low
+  * Initial Release.
+
+ -- Canon Inc. <sup-debian@list.canon.co.jp>  Wed, 21 Dec 2016 12:00:00 +0900
+
 cnijfilter2 (5.30-1endless1) eos; urgency=medium
 
   * Rebased again the latest release.

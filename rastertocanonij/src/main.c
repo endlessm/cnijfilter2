@@ -57,6 +57,12 @@
 
 #define CUSTOM_PAGESIZE_STR "PageSize=Custom"
 
+#define UUID_PTN	"job-uuid=urn:uuid:"
+#define UUID_LEN	(37)
+
+// #define DEBUG_LOG
+
+
 int g_filter_pid = -1;
 int g_signal_received = 0;
 
@@ -70,7 +76,7 @@ static void sigterm_handler( int sigcode )
 
 static int exec_filter(char *cmd_buf, int ofd, int fds[2])
 {
-	int status = 0;
+	// int status = 0;
 	int	child_pid = -1;
 	char *filter_param[4];
 	char shell_buf[256];
@@ -111,7 +117,7 @@ static int exec_filter(char *cmd_buf, int ofd, int fds[2])
 				execv(shell_buf, filter_param);
 						
 				fprintf(stderr, "execl() error\n");
-				status = -1;
+				// status = -1;
 			}
 		}
 		else if( child_pid != -1 )
@@ -223,6 +229,8 @@ static int MakeExecCommand( char *cmd_buf, int cmd_buf_size, ParamList *p_list, 
 
 	DEBUG_PRINT2( "DEBUG:[rastertocanonij] cmd_buf%s",cmd_buf );
 
+fprintf(stderr, "DEBUG: [rastertocanonij] cmd_buf = %s\n", cmd_buf);
+
 	result = 0;
 onErr:
 	return result;
@@ -308,6 +316,25 @@ int main(int argc, char *argv[])
 		fprintf( stderr, "DEBUG:[rastertocanonij] GetOptionBufSize in Error\n" );
 		goto onErr4;
 	}
+
+
+	char	uuid[UUID_LEN];
+	char	jobID[20];
+	char	*cnt = NULL;
+
+	memset(uuid, '\0', UUID_LEN);
+	memset(jobID, '\0', 20);
+
+	cnt = strstr( argv[5], UUID_PTN);
+
+	if( cnt != NULL ){
+		strncpy( uuid, cnt + sizeof(UUID_PTN) - 1, UUID_LEN - 1 );
+	}
+
+	strncpy( jobID, argv[1], strlen(argv[1]) );
+
+	param_list_add( &p_list, "--jobid", jobID, strlen(jobID) + 1 );
+	param_list_add( &p_list, "--uuid", uuid, strlen(uuid) + 1 );
 
 	/* Allocate Command Buffer */
 	cmd_buf_size = CMD_BUF_SIZE;

@@ -38,10 +38,14 @@
 #include <sys/wait.h>
 #include <ctype.h>
 #include <errno.h>
+#include <dlfcn.h>
+#include <time.h>
 
 //#include "./cnclinc/cncl.h"
 #include "./cnclinc/cncldef.h"
 #include "./cnclinc/cnclcmdutils.h"
+
+#include "cnijutil.h"
 
 #if HAVE_CONFIG_H
 #include <config.h>
@@ -59,9 +63,21 @@
 #define PROC_SUCCEEDED	(0)
 
 #define CN_START_JOBID			("00000001")
+#define CN_START_JOBID2			("00000002")
 #define CN_START_JOBID_LEN (9)
 
+#define CN_BUFSIZE				(1024 * 16)
+
 int g_signal_received = 0;
+
+static	char jobDesc[UUID_LEN + 1];
+
+static int (*GetProtocol)(char *, size_t);
+static int (*GETSTRINGWITHTAGFROMFILE)( const char* , const char* , int* , uint8_t** );
+static int (*ParseCapabilityResponsePrint_HostEnv)(void *, int);
+static int (*MakeCommand_StartJob3)(int, char *, char[], void *, int, int *);
+static int (*ParseCapabilityResponsePrint_DateTime)(void *, int);
+static int (*MakeCommand_SetJobConfiguration)(char[], char[], void *, int, int *);
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -179,27 +195,193 @@ static int write_command(const char *command)
 	char jobID[CN_START_JOBID_LEN];
 	long writtenSize;
 	strncpy( jobID, CN_START_JOBID, sizeof(CN_START_JOBID) );
+	uint8_t *command_buffer;
+
+	command_buffer = (uint8_t *) malloc(CN_BUFSIZE);
+
+	if( command_buffer == NULL ){
+		return PROC_FAILED;
+	}
+
+	memset( command_buffer, '\0', CN_BUFSIZE );
 
 	if (command != NULL)
 	{
 		// StartJob
 		{
-			uint8_t command_buffer[1024];
+			// uint8_t command_buffer[1024];
+			// uint8_t command_buffer[CN_BUFSIZE];
+
 #if 0
 			/* poweron */
 			memset(command_buffer, 0x00, sizeof(command_buffer));
 			if (CNCL_MakePrintCommand(CNCL_COMMAND_POWERON, command_buffer, sizeof(command_buffer), NULL, "0") != CNCL_OK) return PROC_FAILED;
 			if (write_buffer(command_buffer, strlen(command_buffer)) != PROC_SUCCEEDED) return PROC_FAILED;
 #endif	
+
+
 			/* start1 */
-			memset(command_buffer, 0x00, sizeof(command_buffer));
-			if (CNCL_GetPrintCommand((char*)command_buffer, sizeof(command_buffer), &writtenSize, jobID, CNCL_COMMAND_START1 ) != CNCL_OK) return PROC_FAILED;
-			if (write_buffer(command_buffer, writtenSize) != PROC_SUCCEEDED) return PROC_FAILED;
-		
+			// memset(command_buffer, 0x00, sizeof(command_buffer));
+
+			void *libclss = NULL;
+			const char *p_ppd_name = getenv("PPD");
+
+			GetProtocol = NULL;
+			GetProtocol = dlsym(libclss, "CNCL_GetProtocol");
+
+			if(dlerror() != NULL){
+				// return PROC_FAILED;
+				goto onErr;
+			}
+
+			CAPABILITY_DATA capability;
+			memset(&capability, '\0', sizeof(CAPABILITY_DATA));
+
+			if( ! GetCapabilityFromPPDFile(p_ppd_name, &capability) ){
+				// return PROC_FAILED;
+				goto onErr;
+			}
+
+			int prot = CNCL_GetProtocol((char *)capability.deviceID, capability.deviceIDLength);
+
+			if( prot == 2 ){
+				uint8_t *xmlBuf = NULL;
+				int xmlBufSize = 0;
+				// long bufSize = 0;
+				int writtenSize_int = 0;
+
+				GETSTRINGWITHTAGFROMFILE = dlsym( libclss, "CNCL_GetStringWithTagFromFile" );
+				if ( dlerror() != NULL ) {
+					fprintf( stderr, "Error in CNCL_GetStringWithTagFromFile\n" );
+					// return PROC_FAILED;
+					goto onErr;
+				}
+				ParseCapabilityResponsePrint_HostEnv = dlsym( libclss, "CNCL_ParseCapabilityResponsePrint_HostEnv" );
+				if ( dlerror() != NULL ) {
+					fprintf( stderr, "Load Error in CNCL_ParseCapabilityResponsePrint_HostEnv\n" );
+					// return PROC_FAILED;
+					goto onErr;
+				}
+				MakeCommand_StartJob3 = dlsym( libclss, "CNCL_MakeCommand_StartJob3" );
+				if ( dlerror() != NULL ) {
+					fprintf( stderr, "Load Error in CNCL_MakeCommand_StartJob3\n" );
+					// return PROC_FAILED;
+					goto onErr;
+				}
+				ParseCapabilityResponsePrint_DateTime = dlsym( libclss, "CNCL_ParseCapabilityResponsePrint_DateTime" );
+				if ( dlerror() != NULL ) {
+					fprintf( stderr, "Load Error in CNCL_ParseCapabilityResponsePrint_DateTime\n" );
+					// return PROC_FAILED;
+					goto onErr;
+				}
+				MakeCommand_SetJobConfiguration = dlsym( libclss, "CNCL_MakeCommand_SetJobConfiguration" );
+				if ( dlerror() != NULL ) {
+					fprintf( stderr, "Load Error in CNCL_MakeCommand_SetJobConfiguration\n" );
+					// return PROC_FAILED;
+					goto onErr;
+				}
+
+				xmlBuf = (uint8_t *) malloc(4096);
+				memset(xmlBuf, '\0', 4096);
+
+				xmlBufSize = GETSTRINGWITHTAGFROMFILE( p_ppd_name, CNCL_FILE_TAG_CAPABILITY, (int *)CNCL_DECODE_EXEC, &xmlBuf );
+
+				// unsigned short hostEnv = 0;
+				int hostEnv = 0;
+				hostEnv = ParseCapabilityResponsePrint_HostEnv( xmlBuf, xmlBufSize );
+
+				/* Set JobID */
+				strncpy( jobID, CN_START_JOBID2, sizeof(CN_START_JOBID2) );
+
+				/* Allocate Buffer */
+				// bufSize = sizeof(char) * CN_BUFSIZE;
+
+				// if ( (bufTop = malloc( bufSize )) == NULL ) goto onErr2;
+
+				/* Write StartJob Command */
+				int ret = 0;
+
+				// ret = MakeCommand_StartJob3( hostEnv, uuid, jobID, bufTop, bufSize, &writtenSize );
+				ret = MakeCommand_StartJob3( hostEnv, jobDesc, jobID, command_buffer, CN_BUFSIZE, &writtenSize_int );
+
+				if ( ret != 0 ) {
+					fprintf( stderr, "Error in CNCL_GetPrintCommand\n" );
+					// return PROC_FAILED;
+					goto onErr;
+				}
+
+				if (write_buffer(command_buffer, writtenSize_int) != PROC_SUCCEEDED){
+					// return PROC_FAILED;
+					goto onErr;
+				}
+
+
+				ret = ParseCapabilityResponsePrint_DateTime( xmlBuf, xmlBufSize );
+
+				if( ret == 2 ){
+					char dateTime[15];
+					// char *dateTime;
+					// dateTime = (char *) malloc(15);
+					memset(dateTime, '\0', sizeof(dateTime));
+					// memset(dateTime, '\0', 15);
+
+					time_t timer = time(NULL);
+					struct tm *date = localtime(&timer);
+
+					sprintf(dateTime, "%d%02d%02d%02d%02d%02d",
+						date->tm_year+1900, date->tm_mon+1, date->tm_mday,
+						date->tm_hour, date->tm_min, date->tm_sec);
+
+					// char *tmpBuf = NULL;
+
+					// if ( (tmpBuf = malloc( bufSize )) == NULL ) return PROC_FAILED;
+
+					// memset(command_buffer, 0x00, sizeof(command_buffer));
+					memset( command_buffer, 0x00, CN_BUFSIZE );
+
+					// ret = MakeCommand_SetJobConfiguration( jobID, dateTime, tmpBuf, bufSize, &writtenSize_int );
+					ret = MakeCommand_SetJobConfiguration( jobID, dateTime, command_buffer, CN_BUFSIZE, &writtenSize_int );
+
+					// if( dateTime != NULL ){
+					// 	free( dateTime );
+					// }
+
+					/* WriteData */
+					// if ( (retSize = write( 1, tmpBuf, writtenSize )) != writtenSize ) goto onErr2;
+					// if (write_buffer(tmpBuf, writtenSize) != PROC_SUCCEEDED){
+					if (write_buffer(command_buffer, writtenSize_int) != PROC_SUCCEEDED){
+						// return PROC_FAILED;
+						goto onErr;
+					}
+
+					// writtenSize += tmpWrittenSize;
+				}
+
+
+				if ( libclss != NULL ) {
+					dlclose( libclss );
+				}
+				// if ( xmlBuf != NULL ){
+				// 	free( xmlBuf );
+				// }
+			}
+			else{
+				// if (CNCL_GetPrintCommand((char*)command_buffer, sizeof(command_buffer), &writtenSize, jobID, CNCL_COMMAND_START1 ) != CNCL_OK) return PROC_FAILED;
+				if (CNCL_GetPrintCommand((char*)command_buffer, CN_BUFSIZE, &writtenSize, jobID, CNCL_COMMAND_START1 ) != CNCL_OK) goto onErr;
+
+				// if (write_buffer(command_buffer, writtenSize) != PROC_SUCCEEDED) return PROC_FAILED;
+				if (write_buffer(command_buffer, writtenSize) != PROC_SUCCEEDED) goto onErr;
+			}
+
 			/* start2 */
-			memset(command_buffer, 0x00, sizeof(command_buffer));
-			if (CNCL_GetPrintCommand((char*)command_buffer, sizeof(command_buffer), &writtenSize, jobID, CNCL_COMMAND_START2 ) != CNCL_OK) return PROC_FAILED;
-			if (write_buffer(command_buffer, writtenSize) != PROC_SUCCEEDED) return PROC_FAILED;
+			// memset(command_buffer, 0x00, sizeof(command_buffer));
+			memset( command_buffer, 0x00, CN_BUFSIZE );
+
+			// if (CNCL_GetPrintCommand((char*)command_buffer, sizeof(command_buffer), &writtenSize, jobID, CNCL_COMMAND_START2 ) != CNCL_OK) return PROC_FAILED;
+			if (CNCL_GetPrintCommand((char*)command_buffer, CN_BUFSIZE, &writtenSize, jobID, CNCL_COMMAND_START2 ) != CNCL_OK) goto onErr;
+
+			// if (write_buffer(command_buffer, writtenSize) != PROC_SUCCEEDED) return PROC_FAILED;
+			if (write_buffer(command_buffer, writtenSize) != PROC_SUCCEEDED) goto onErr;
 		}
 	
 		// SetTime
@@ -208,31 +390,44 @@ static int write_command(const char *command)
 			size_t setTimeBufSize = 0;
 			memset(setTimeBuffer, 0, sizeof(setTimeBuffer));
 			//if (CNCL_MakeBJLSetTimeJob(setTimeBuffer, sizeof(setTimeBuffer), &setTimeBufSize) != CNCL_OK) return PROC_FAILED;
-			if (write_buffer(setTimeBuffer, setTimeBufSize) != PROC_SUCCEEDED) return PROC_FAILED;
+			// if (write_buffer(setTimeBuffer, setTimeBufSize) != PROC_SUCCEEDED) return PROC_FAILED;
+			if (write_buffer(setTimeBuffer, setTimeBufSize) != PROC_SUCCEEDED) goto onErr;
 		}
 		
 		// Maintenance Job
 		{
 			uint8_t start_cmd[] = {0x1B,0x5B,0x4B,0x02,0x00,0x00,0x1F,'B','J','L','S','T','A','R','T',0x0A};
-			if (write_buffer(start_cmd, sizeof(start_cmd)) != PROC_SUCCEEDED) return PROC_FAILED;
+			// if (write_buffer(start_cmd, sizeof(start_cmd)) != PROC_SUCCEEDED) return PROC_FAILED;
+			if (write_buffer(start_cmd, sizeof(start_cmd)) != PROC_SUCCEEDED) goto onErr;
 		
 			size_t cmdSize = strlen(command);
 			//fprintf(stderr, "DEBUG: [cmdtocanonij] cmdSize = %d, Command=[%s]\n", cmdSize, command);
-			if (write_buffer((uint8_t *)command, cmdSize) != PROC_SUCCEEDED) return PROC_FAILED;
+			// if (write_buffer((uint8_t *)command, cmdSize) != PROC_SUCCEEDED) return PROC_FAILED;
+			if (write_buffer((uint8_t *)command, cmdSize) != PROC_SUCCEEDED) goto onErr;
 		
 			uint8_t end_cmd[] = {0x0A,'B','J','L','E','N','D',0x0A};
-			if (write_buffer(end_cmd, sizeof(end_cmd)) != PROC_SUCCEEDED) return PROC_FAILED;
+			// if (write_buffer(end_cmd, sizeof(end_cmd)) != PROC_SUCCEEDED) return PROC_FAILED;
+			if (write_buffer(end_cmd, sizeof(end_cmd)) != PROC_SUCCEEDED) goto onErr;
 		}
 		
 		// EndJob
 		{
-			uint8_t command_buffer[1024];
-			memset(command_buffer, 0x00, sizeof(command_buffer));
-			if (CNCL_GetPrintCommand((char*)command_buffer, sizeof(command_buffer), &writtenSize, jobID, CNCL_COMMAND_END ) != CNCL_OK) return PROC_FAILED;
-			if (write_buffer(command_buffer, writtenSize) != PROC_SUCCEEDED) return PROC_FAILED;
+			uint8_t cmd_buffer[1024];
+			memset(cmd_buffer, 0x00, sizeof(cmd_buffer));
+
+			if (CNCL_GetPrintCommand((char*)cmd_buffer, sizeof(cmd_buffer), &writtenSize, jobID, CNCL_COMMAND_END ) != CNCL_OK) return PROC_FAILED;
+			if (write_buffer(cmd_buffer, writtenSize) != PROC_SUCCEEDED) return PROC_FAILED;
 		}
 	}
+
 	return PROC_SUCCEEDED;
+
+onErr:
+	if( command_buffer != NULL ){
+		free( command_buffer );
+	}
+
+	return PROC_FAILED;
 }
 
 
@@ -315,10 +510,21 @@ int main(int argc, char *argv[])
 			goto error_exit;
 		}
 	}
-	
+
+// <<<<<<< HEAD
+	// jobDesc = (char *) malloc( UUID_LEN + 1 );
+	// memset( jobDesc, '\0', UUID_LEN + 1 );
+// =======
+	memset( jobDesc, '\0', strlen(jobDesc) );
+// >>>>>>> parent of 1f4dac4... Test : cmdtocanonij2
+
+	if( GetUUID( argv[5], jobDesc ) != 0 ){
+		strncpy( jobDesc, argv[1], UUID_LEN );
+	}
+
 	// send command from command file.
 	retVal = send_maintenance_command(ifd);
-	
+
 error_exit:
 	fprintf(stderr, "DEBUG: [cmdtocanonij] exited with code %d.\n", retVal);
 	return 0;

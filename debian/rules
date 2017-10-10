@@ -36,6 +36,8 @@ configure-stamp:
 	### library symlinks
 	ln -sf `basename com/libs_bin${_arc}/libcnnet2.so.*` com/libs_bin${_arc}/libcnnet2.so
 	ln -sf `basename com/libs_bin${_arc}/libcnbpcnclapicom2.so.*` com/libs_bin${_arc}/libcnbpcnclapicom2.so
+	ln -sf `basename com/libs_bin${_arc}/libcnbpnet20.so.*` com/libs_bin${_arc}/libcnbpnet20.so
+	ln -sf `basename com/libs_bin${_arc}/libcnbpnet30.so.*` com/libs_bin${_arc}/libcnbpnet30.so
 
 	### configure 
 	@echo "######## configure cmdtocanonij2"; \
@@ -98,6 +100,8 @@ install: build
 	cp -P com/libs_bin${_arc}/libcnnet2.so $(CURDIR)/debian/${COMMON_PKG}/usr/lib; \
 	install -c -m 755 com/libs_bin${_arc}/libcnbpcnclapicom2.so.* $(CURDIR)/debian/${COMMON_PKG}/usr/lib; \
 	cp -P com/libs_bin${_arc}/libcnbpcnclapicom2.so $(CURDIR)/debian/${COMMON_PKG}/usr/lib; \
+	install -c -m 755 com/libs_bin${_arc}/libcnbpnet20.so.* $(CURDIR)/debian/${COMMON_PKG}/usr/lib; \
+	install -c -m 755 com/libs_bin${_arc}/libcnbpnet30.so.* $(CURDIR)/debian/${COMMON_PKG}/usr/lib; \
 	mkdir -p $(CURDIR)/debian/${COMMON_PKG}/usr/share/ppd; \
 	install -c -m 644 -o lp -g lp ppd/*.ppd $(CURDIR)/debian/${COMMON_PKG}/usr/share/ppd; \
 

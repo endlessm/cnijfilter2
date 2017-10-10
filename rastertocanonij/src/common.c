@@ -31,10 +31,15 @@ char *GetExecProgPath( void )
     static char buf[BUF_SIZE]={};
     char path[BUF_SIZE];
 	int len = 0;
-	char *result = NULL;
+	// char *result = NULL;
+    ssize_t read_len = 0;
 
     snprintf( path, BUF_SIZE, "/proc/%d/exe", getpid() );
-    readlink( path, buf, sizeof(buf)-1 );
+    read_len = readlink( path, buf, sizeof(buf)-1 );
+
+	if( read_len < 0 ){
+		goto onErr;
+	}
 
 	len = strlen(buf);
 	while( len > 0 ){
@@ -48,11 +53,12 @@ char *GetExecProgPath( void )
 	}
 
 	if ( len != 0 ){
-		result = buf;
+		// result = buf;
 	}
 	else {
-		result = NULL;
+		// result = NULL;
 	}
 
+onErr:
     return buf;
 }

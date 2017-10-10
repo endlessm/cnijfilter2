@@ -39,9 +39,11 @@
 #include "cnijcomif.h"
 #include "cnijifnet.h"
 #include "cnijifusb.h"
+#include "cnijifnet2.h"
 #include "./common/libcnnet.h"
 
-//#define _DEBUG_MODE_
+// #define _DEBUG_MODE_
+
 
 int CNIF_Open(const char *_deviceID, CNIF_INFO *_if_info)
 {
@@ -51,6 +53,8 @@ int CNIF_Open(const char *_deviceID, CNIF_INFO *_if_info)
 			return CNIF_USB_Open(_deviceID, _if_info);
 		case CNIF_TYPE_NET:
 			return CNIF_Network_Open(_deviceID, _if_info);
+		case CNIF_TYPE_NET2:
+			return CNIF_Network2_Open(_deviceID);
 		default:
 			break;
 	}
@@ -65,6 +69,8 @@ int CNIF_StartSession(CNIF_INFO *_if_info)
 			return CN_LGMON_OK;
 		case CNIF_TYPE_NET:
 			return CNIF_Network_StartSession();
+		case CNIF_TYPE_NET2:
+			return CNIF_Network2_StartSession();
 		default:
 			break;
 	}
@@ -79,6 +85,8 @@ int CNIF_Close(CNIF_INFO *_if_info)
 			return CNIF_USB_Close();
 		case CNIF_TYPE_NET:
 			return CNIF_Network_Close();
+		case CNIF_TYPE_NET2:
+			return CNIF_Network2_EndSession();
 		default:
 			break;
 	}
@@ -107,6 +115,8 @@ int CNIF_Read(CNIF_INFO *_if_info, uint8_t *buffer, size_t bufferSize, size_t *r
 			return CNIF_USB_Read(buffer, bufferSize, readSize);
 		case CNIF_TYPE_NET:
 			return CNIF_Network_Read(buffer, bufferSize, readSize);
+		case CNIF_TYPE_NET2:
+			return CNIF_Network2_ReadStatusPrint(buffer, bufferSize, readSize);
 		default:
 			break;
 	}
@@ -134,9 +144,26 @@ int CNIF_Write(CNIF_INFO *_if_info, uint8_t *buffer, size_t bufferSize, size_t *
 			break;
 		case CNIF_TYPE_NET:
 			return CNIF_Network_Write(buffer, bufferSize, writtenSize);
+		case CNIF_TYPE_NET2:
+			return CNIF_Network2_SendData(buffer, bufferSize, writtenSize);
 		default:
 			break;
 	}
+	return err;
+}
+
+int CNIF_Send(CNIF_INFO *_if_info, uint8_t *buffer, size_t bufferSize, size_t *writtenSize)
+{
+	int err = 0;
+
+	switch (_if_info->ifType)
+	{
+		case CNIF_TYPE_NET2:
+			return CNIF_Network2_SendData(buffer, bufferSize, writtenSize);
+		default:
+			break;
+	}
+
 	return err;
 }
 
@@ -207,7 +234,7 @@ onErr:
 
 int CNIF_Discover(CNIF_INFO *_if_info, int installer)
 {
-	int err_usb = 0, err_net = 0;
+	int err_usb = 0, err_net = 0, err_net2 = 0;
 	
 	if(installer == 0) {
 		
@@ -217,11 +244,16 @@ int CNIF_Discover(CNIF_INFO *_if_info, int installer)
 
 		err_usb = CNIF_USB_Discover();
 		err_net = CNIF_Network_Discover(installer);
+		err_net2 = CNIF_Network2_Discover(installer);
+
 		if (err_usb < 0) {
 			return err_usb;
 		}
 		if (err_net < 0) {
 			return err_net;
+		}
+		if (err_net2 < 0) {
+			return err_net2;
 		}
 	} else {
 
@@ -243,6 +275,12 @@ int CNIF_Discover(CNIF_INFO *_if_info, int installer)
 					return err_net;
 				}
 				break;
+			case CNIF_TYPE_NET2:
+				err_net2 = CNIF_Network2_Discover(installer);
+				if (err_net2 < 0) {
+					return err_net2;
+				}
+				break;
 			default:
 				break;
 		}
@@ -258,9 +296,27 @@ int CNIF_Cancel(CNIF_INFO *_if_info)
 			return CNIF_USB_Cancel();
 		case CNIF_TYPE_NET:
 			return CNIF_Network_Cancel();
+		case CNIF_TYPE_NET2:
+			return CNIF_Network2_CancelPrint("00000002");
 		default:
 			break;
 	}
 	return CN_LGMON_OK;
 }
 
+int CNIF_KeepSession(CNIF_INFO *_if_info)
+{
+	switch (_if_info->ifType)
+	{
+		case CNIF_TYPE_USB:
+			break;
+		case CNIF_TYPE_NET:
+			break;
+		case CNIF_TYPE_NET2:
+			return CNIF_Network2_SendDummyData();
+		default:
+			break;
+	}
+
+	return CN_LGMON_OK;
+}

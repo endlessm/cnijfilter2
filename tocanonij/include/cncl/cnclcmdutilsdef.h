@@ -1,6 +1,6 @@
 /*
  *  Canon Inkjet Printer Driver for Linux
- *  Copyright CANON INC. 2001-2016
+ *  Copyright CANON INC. 2014
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -42,21 +42,29 @@
 #define CNCL_PSET_MEDIA_GLOSSY_PAPER (10)
 #define CNCL_PSET_MEDIA_MATTE_PAPER (11)
 #define CNCL_PSET_MEDIA_PHOTOPAPER (12)
-#define CNCL_PSET_MEDIA_ENVELOPE (13)
-#define CNCL_PSET_MEDIA_INKJET_HAGAKI (14)
-#define CNCL_PSET_MEDIA_HAGAKI (15)
-#define CNCL_PSET_MEDIA_HIGHRES (16)
-#define CNCL_PSET_MEDIA_OHTER_PHOTO_PAPER (17)
+#define CNCL_PSET_MEDIA_ENVELOPE (17)
+#define CNCL_PSET_MEDIA_INKJET_HAGAKI (13)
+#define CNCL_PSET_MEDIA_HAGAKI (14)
+#define CNCL_PSET_MEDIA_LABEL (18)
+#define CNCL_PSET_MEDIA_HIGHRES (15)
+#define CNCL_PSET_MEDIA_OTHER_PHOTO_PAPER (16)
 
 /* pagesize */
 #define CNCL_PSET_SIZE_LETTER (1)
 #define CNCL_PSET_SIZE_LEGAL (2)
+#define CNCL_PSET_SIZE_EXECUTIVE (22)
+#define CNCL_PSET_SIZE_A6 (23)
 #define CNCL_PSET_SIZE_A5 (3)
 #define CNCL_PSET_SIZE_A4 (4)
 #define CNCL_PSET_SIZE_A3 (5)
 #define CNCL_PSET_SIZE_A3_PLUS (6)
 #define CNCL_PSET_SIZE_B5 (7)
 #define CNCL_PSET_SIZE_B4 (8)
+#define CNCL_PSET_SIZE_OFICIO (24)
+#define CNCL_PSET_SIZE_B_OFICIO (25)
+#define CNCL_PSET_SIZE_M_OFICIO (26)
+#define CNCL_PSET_SIZE_FOOLSCAP (27)
+#define CNCL_PSET_SIZE_LEGAL_INDIA (28)
 #define CNCL_PSET_SIZE_4X6 (9)
 #define CNCL_PSET_SIZE_5X7 (10)
 #define CNCL_PSET_SIZE_6GIRI (11)
@@ -64,9 +72,10 @@
 #define CNCL_PSET_SIZE_L (14)
 #define CNCL_PSET_SIZE_2L (15)
 #define CNCL_PSET_SIZE_POST (16)
-#define CNCL_PSET_SIZE_ENV_10 (17)
-#define CNCL_PSET_SIZE_ENV_DL (18)
-#define CNCL_PSET_SIZE_BUSINESSCARD (20)
+#define CNCL_PSET_SIZE_ENV_10 (20)
+#define CNCL_PSET_SIZE_ENV_DL (21)
+#define CNCL_PSET_SIZE_BUSINESSCARD (18)
+#define CNCL_PSET_SIZE_SQUARE_127 (29)
 
 /* colormode */
 #define CNCL_PSET_COLORMODE_MONO (2)
