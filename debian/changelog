@@ -1,3 +1,9 @@
+cnijfilter2 (5.40-1endless2) eos; urgency=medium
+
+  * No-change version bump to allow for new tag
+
+ -- Sam Spilsbury <sam@endlessm.com>  Wed, 11 Oct 2017 05:55:35 +0800
+
 cnijfilter2 (5.40-1endless1) eos; urgency=medium
 
   * Rebased against the latest release.
