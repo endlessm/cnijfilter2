@@ -4,7 +4,7 @@ INCLUDES = \
 bin_PROGRAMS= tocanonij
 
 tocanonij_SOURCES= \
-	main.c
+	main.c cnijutil.c
 
 tocanonij_LDADD = -ldl
 

@@ -44,7 +44,7 @@
 #include "cnijlgmon3.h"
 #include "cnijifusb.h"
 
-//#define _DEBUG_MODE_
+// #define _DEBUG_MODE_
 #define PRINTER_ALTERNATIVE_NUM 0
 
 static struct libusb_device **g_list = NULL;				/* device list */
@@ -361,38 +361,64 @@ int CNIF_USB_Read(uint8_t *buffer, size_t buffer_size, size_t *read_size)
 
 #ifdef _DEBUG_MODE_
 	fprintf(stderr, "DEBUG: read data start\n");
+	fprintf(stderr, "DEBUG: [libusb_bulk_transfer] buffer_size : (%ld)\n", buffer_size);
 #endif
-	
-	for (i = 0; i < 3; i++) {
+
+	i = 0;
+	int ret = 1;
+
+	while(1){
 		err = libusb_bulk_transfer(g_dh, g_num[2], (unsigned char *)buffer, buffer_size - 1, (int *)read_size, CN_WRITE_TIMEOUT);
+
+#ifdef _DEBUG_MODE_
+		fprintf(stderr, "DEBUG: [libusb_bulk_transfer] read_size : (%ld)\n", *read_size);
+#endif
+
 		if(err < 0) {
 	        if (err == LIBUSB_ERROR_OVERFLOW) {
 #ifdef _DEBUG_MODE_
-	        	fprintf(stderr, "DEBUG: read overflow error(%d)\n", err);//ERROR_MSG
-#endif
-	        	break;
-			} else if (err == LIBUSB_ERROR_TIMEOUT) {
-#ifdef _DEBUG_MODE_
-			fprintf(stderr, "DEBUG: read timeout error(%d)\n", err);//ERROR_MSG
+	        	fprintf(stderr, "DEBUG: [libusb_bulk_transfer] read overflow error(%d)\n", err);//ERROR_MSG
 #endif
 
+				ret = LIBUSB_ERROR_OVERFLOW;
+
+			} else if (err == LIBUSB_ERROR_TIMEOUT) {
+#ifdef _DEBUG_MODE_
+			fprintf(stderr, "DEBUG: [libusb_bulk_transfer] read timeout error(%d)\n", err);//ERROR_MSG
+#endif
+
+				continue;
 			} else {
 #ifdef _DEBUG_MODE_
-	        	fprintf(stderr, "DEBUG: usb_bulk_read error(%d)\n", err);//ERROR_MSG
+	        	fprintf(stderr, "DEBUG: [libusb_bulk_transfer] usb_bulk_read error(%d)\n", err);//ERROR_MSG
 #endif
 	        }
-	        if(i == 2) {
+
+	        if(i >= 10) {
+#ifdef _DEBUG_MODE_
+	        	fprintf(stderr, "DEBUG: [libusb_bulk_transfer] usb_bulk_read retry error\n");//ERROR_MSG
+#endif
 				goto onErr;
 			}
 	    }
-	    break;
+		else{
+			break;
+		}
+
+		i++;
     }
 #ifdef _DEBUG_MODE_
 	fprintf(stderr, "read data = %s, size = %d\n", buffer, (int)*read_size);
 #endif
-	
+
 onErr:
-	return err;
+
+	if( ret != LIBUSB_ERROR_OVERFLOW ){
+		return err;
+	}
+	else{
+		return ret;
+	}
 }
 
 int CNIF_USB_Write(uint8_t *buffer, size_t buffer_size, size_t *written_size)

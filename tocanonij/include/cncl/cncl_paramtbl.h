@@ -1,6 +1,6 @@
 /*
  *  Canon Inkjet Printer Driver for Linux
- *  Copyright CANON INC. 2001-2016
+ *  Copyright CANON INC. 2014
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -46,8 +46,9 @@ static const MapTbl mediatypeTbl[] = {
 	{ "envelope", CNCL_PSET_MEDIA_ENVELOPE },
 	{ "ijpostcard", CNCL_PSET_MEDIA_INKJET_HAGAKI },
 	{ "postcard", CNCL_PSET_MEDIA_HAGAKI },
+	{ "label", CNCL_PSET_MEDIA_LABEL },
 	{ "highres", CNCL_PSET_MEDIA_HIGHRES },
-	{ "photo", CNCL_PSET_MEDIA_OHTER_PHOTO_PAPER },
+	{ "photo", CNCL_PSET_MEDIA_OTHER_PHOTO_PAPER },
 	{ NULL, -1 },
 };
 
@@ -55,6 +56,8 @@ static const MapTbl papersizeTbl[] = {
 	{ "Letter", CNCL_PSET_SIZE_LETTER },
 	{ "Letter.bl", CNCL_PSET_SIZE_LETTER },
 	{ "legal", CNCL_PSET_SIZE_LEGAL },
+	{ "executive", CNCL_PSET_SIZE_EXECUTIVE },
+	{ "a6", CNCL_PSET_SIZE_A6 },
 	{ "A5", CNCL_PSET_SIZE_A5 },
 	{ "A4", CNCL_PSET_SIZE_A4 },
 	{ "A4.bl", CNCL_PSET_SIZE_A4 },
@@ -64,6 +67,11 @@ static const MapTbl papersizeTbl[] = {
 	{ "a3plus.bl", CNCL_PSET_SIZE_A3_PLUS },
 	{ "B5", CNCL_PSET_SIZE_B5 },
 	{ "B4", CNCL_PSET_SIZE_B4 },
+	{ "oficio", CNCL_PSET_SIZE_OFICIO },
+	{ "boficio", CNCL_PSET_SIZE_B_OFICIO },
+	{ "moficio", CNCL_PSET_SIZE_M_OFICIO },
+	{ "foolscap", CNCL_PSET_SIZE_FOOLSCAP },
+	{ "legalindia", CNCL_PSET_SIZE_LEGAL_INDIA },
 	{ "4x6", CNCL_PSET_SIZE_4X6 },
 	{ "4x6.bl", CNCL_PSET_SIZE_4X6 },
 	{ "5x7", CNCL_PSET_SIZE_5X7 },
@@ -82,6 +90,8 @@ static const MapTbl papersizeTbl[] = {
 	{ "envelopdlp", CNCL_PSET_SIZE_ENV_DL },
 	{ "businesscard", CNCL_PSET_SIZE_BUSINESSCARD },
 	{ "businesscard.bl", CNCL_PSET_SIZE_BUSINESSCARD },
+	{ "square127", CNCL_PSET_SIZE_SQUARE_127 },
+	{ "square127.bl", CNCL_PSET_SIZE_SQUARE_127 },
 	{ NULL, -1 },
 };
 

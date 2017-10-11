@@ -76,7 +76,7 @@
 #endif /* WIN32 || __EMX__ */
 
 #define CNIJ_LGMON2_PATH	PROG_PATH "/cnijlgmon3"
-//#define _DEBUG_MODE_
+// #define _DEBUG_MODE_
 
 pid_t pid = -1;
 
@@ -193,7 +193,8 @@ main(int  argc,		/* I - Number of command-line arguments (6 or 7) */
 		if (argc == 1) {
 			execl(CNIJ_LGMON2_PATH, "cnijlgmon3", NULL);
 		} else {
-			execl(CNIJ_LGMON2_PATH, "cnijlgmon3", printer_uri, copies, NULL);
+			// execl(CNIJ_LGMON2_PATH, "cnijlgmon3", printer_uri, copies, NULL);
+			execl(CNIJ_LGMON2_PATH, "cnijlgmon3", printer_uri, copies, argv[5], argv[1], NULL);
 		}
 	}
 	

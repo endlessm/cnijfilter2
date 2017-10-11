@@ -20,11 +20,11 @@
 ##
 ##############################################################################
 
-C_version="5.30-1"
+C_version="5.40-1"
 C_copyright_end="2016"
 C_default_system="rpm"
 
-P_support_printer=("G3000")
+P_support_printer=("MB2100" "MB2700" "IB4100" "MB5100" "MB5400" "TS9000" "TS8000" "TS6000" "TS5000" "MG3000" "E470" "G4000")
 
 L_INST_COM_01_01="Command executed = %s\n"
 

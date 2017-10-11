@@ -32,6 +32,7 @@
 #include <getopt.h>
 #include <dlfcn.h>
 #include <errno.h>
+#include <time.h>
 //#include "cncl.h"
 #include "cnclcmdutils.h"
 #include "cnclcmdutilsdef.h"
@@ -43,6 +44,12 @@
 #define CN_CNCL_LIBNAME "libcnbpcnclapicom2.so"
 #define TMP_BUF_SIZE 256
 #define IS_NUMBER(c)	(c >= '0' && c <= '9')
+// #define UUID_LEN	(37)
+
+// #include "ivec.h"
+#include "cnijutil.h"
+
+int (*CNCL_GetString)(const char*, const char*, int, uint8_t**);
 
 
 enum {
@@ -53,6 +60,8 @@ enum {
 	OPT_BORDERLESSPRINT,
 	OPT_COLORMODE,
 	OPT_DUPLEXPRINT,
+	OPT_JOBID,
+	OPT_UUID
 };
 
 static int is_size_X(char *str)
@@ -198,16 +207,23 @@ onErr:
 static int (*GETSETCONFIGURATIONCOMMAND)( CNCL_P_SETTINGSPTR, char *, long ,void *, long, char *, long * );
 static int (*GETSENDDATAPWGRASTERCOMMAND)( char *, long, long, char *, long * );
 static int (*GETPRINTCOMMAND)( char *, long, long *, char *, long );
-static int (*GETSTRINGWITHTAGFROMFILE)( const char* , const char* , int , uint8_t**  );
-static int (*GETSETPAGECONFIGUARTIONCOMMAND)( const char* , unsigned short , void * , long, long *  );
+static int (*GETSTRINGWITHTAGFROMFILE)( const char* , const char* , int* , uint8_t** );
+static int (*GETSETPAGECONFIGUARTIONCOMMAND)( const char* , unsigned short , void * , long, long * );
 static int (*MAKEBJLSETTIMEJOB)( void*, size_t, size_t* );
+static int (*GetProtocol)(char *, size_t);
+static int (*ParseCapabilityResponsePrint_HostEnv)(void *, int);
+static int (*MakeCommand_StartJob3)(int, char *, char[], void *, int, int *);
+static int (*ParseCapabilityResponsePrint_DateTime)(void *, int);
+static int (*MakeCommand_SetJobConfiguration)(char[], char[], void *, int, int *);
 
 
 /* CN_START_JOBID */
 #define CN_BUFSIZE				(1024 * 256)
 #define CN_START_JOBID			("00000001")
+#define CN_START_JOBID2			("00000002")
 #define CN_START_JOBID_LEN		(9)
 
+// #define DEBUG_LOG
 
 int OutputSetTime( int fd, char *jobID )
 {
@@ -263,7 +279,9 @@ int main( int argc, char *argv[] )
 	int opt, opt_index;
 	int result = -1;
 	long bufSize = 0; 
-	long writtenSize;
+	// long writtenSize;
+	int writtenSize = 0;
+	long writtenSize_long = 0;
 	char *bufTop = NULL;
 	CNCL_P_SETTINGS Settings;
 	char jobID[CN_START_JOBID_LEN];
@@ -276,12 +294,18 @@ int main( int argc, char *argv[] )
 		{ "mediatype", required_argument, NULL, OPT_MEDIATYPE }, 
 		{ "grayscale", required_argument, NULL, OPT_COLORMODE }, 
 		{ "duplexprint", required_argument, NULL, OPT_DUPLEXPRINT }, 
+		{ "jobid", required_argument, NULL, OPT_JOBID }, 
+		{ "uuid", required_argument, NULL, OPT_UUID }, 
 		{ 0, 0, 0, 0 }, 
 	};
 	const char *p_ppd_name = getenv("PPD");
 	uint8_t *xmlBuf = NULL;
 	int xmlBufSize;
 	int retSize;
+
+	char *tmpBuf = NULL;
+
+	char	uuid[UUID_LEN + 1];
 
 	DEBUG_PRINT( "[tocanonij] start tocanonij\n" );
 
@@ -292,10 +316,16 @@ int main( int argc, char *argv[] )
 	GETSTRINGWITHTAGFROMFILE = NULL;
 	GETSETPAGECONFIGUARTIONCOMMAND = NULL;
 	MAKEBJLSETTIMEJOB = NULL;
+	GetProtocol = NULL;
+	ParseCapabilityResponsePrint_HostEnv=NULL;
+	MakeCommand_StartJob3 = NULL;
+	ParseCapabilityResponsePrint_DateTime = NULL;
+	MakeCommand_SetJobConfiguration = NULL;
 
 	/* Init Settings */
 	memset( &Settings, 0x00, sizeof(CNCL_P_SETTINGS) );
 	InitpSettings( &Settings );
+	memset( uuid, '\0', sizeof(uuid) );
 
 	while( (opt = getopt_long( argc, argv, "0:", long_opt, &opt_index )) != -1) {
 		switch( opt ) {
@@ -341,6 +371,16 @@ int main( int argc, char *argv[] )
 				//Settings.duplexprint = CNCL_PSET_DUPLEX_OFF;
 				Settings.duplexprint = ConvertStrToID( optarg, duplexprintTbl);
 				break;
+
+			case OPT_UUID:
+				strncpy( uuid, optarg, strlen(optarg) );
+				break;
+			case OPT_JOBID:
+				if( strlen( uuid ) == 0 ){
+					strncpy( uuid, optarg, strlen(optarg) );
+				}
+				break;
+
 			case '?':
 				fprintf( stderr, "Error: invalid option %c:\n", optopt);
 				break;
@@ -348,6 +388,7 @@ int main( int argc, char *argv[] )
 				break;
 		}
 	}
+
 	/* dlopen */
 	/* Make progamname with path of execute progname. */
 	//snprintf( libPathBuf, CN_LIB_PATH_LEN, "%s%s", GetExecProgPath(), CN_CNCL_LIBNAME );
@@ -394,51 +435,137 @@ int main( int argc, char *argv[] )
 		fprintf( stderr, "Load Error in CNCL_MakeBJLSetTimeJob\n" );
 		goto onErr2;
 	}
+	GetProtocol = dlsym( libclss, "CNCL_GetProtocol" );
+	if ( dlerror() != NULL ) {
+		fprintf( stderr, "Load Error in CNCL_MakeBJLSetTimeJob\n" );
+		goto onErr2;
+	}
+	ParseCapabilityResponsePrint_HostEnv = dlsym( libclss, "CNCL_ParseCapabilityResponsePrint_HostEnv" );
+	if ( dlerror() != NULL ) {
+		fprintf( stderr, "Load Error in CNCL_ParseCapabilityResponsePrint_HostEnv\n" );
+		goto onErr2;
+	}
+	MakeCommand_StartJob3 = dlsym( libclss, "CNCL_MakeCommand_StartJob3" );
+	if ( dlerror() != NULL ) {
+		fprintf( stderr, "Load Error in CNCL_MakeCommand_StartJob3\n" );
+		goto onErr2;
+	}
+	ParseCapabilityResponsePrint_DateTime = dlsym( libclss, "CNCL_ParseCapabilityResponsePrint_DateTime" );
+	if ( dlerror() != NULL ) {
+		fprintf( stderr, "Load Error in CNCL_ParseCapabilityResponsePrint_DateTime\n" );
+		goto onErr2;
+	}
+	MakeCommand_SetJobConfiguration = dlsym( libclss, "CNCL_MakeCommand_SetJobConfiguration" );
+	if ( dlerror() != NULL ) {
+		fprintf( stderr, "Load Error in CNCL_MakeCommand_SetJobConfiguration\n" );
+		goto onErr2;
+	}
 
 	/* Check Settings */
 	if ( CheckSettings( &Settings ) != 0 ) goto onErr2;
-
 
 #if 1
 	/* Dump Settings */
 	DumpSettings( &Settings );
 #endif
 
+	// const char *p_ppd_name = getenv("PPD");
+	CAPABILITY_DATA capability;
+	memset(&capability, '\0', sizeof(CAPABILITY_DATA));
 
-	/* Set JobID */
-	strncpy( jobID, CN_START_JOBID, sizeof(CN_START_JOBID) );
-
-	/* OutputSetTime */
-	if ( OutputSetTime( 1, jobID ) != 0 ) goto onErr2;
-
-
-	/* Allocate Buffer */
-	bufSize = sizeof(char) * CN_BUFSIZE;
-	if ( (bufTop = malloc( bufSize )) == NULL ) goto onErr2;
-
-	/* Write StartJob Command */
-	if ( GETPRINTCOMMAND( bufTop, bufSize, &writtenSize, jobID, CNCL_COMMAND_START1 ) != 0 ) {
-		fprintf( stderr, "Error in CNCL_GetPrintCommand\n" );
-		goto onErr2;
-
+	if( ! GetCapabilityFromPPDFile(p_ppd_name, &capability) ){
+		goto onErr3;
 	}
-	/* WriteData */
-	if ( (retSize = write( 1, bufTop, writtenSize )) != writtenSize ) goto onErr2;
+
+	int prot = GetProtocol( (char *)capability.deviceID, capability.deviceIDLength );
+
+	if( prot == 2 ){
+		xmlBufSize = GETSTRINGWITHTAGFROMFILE( p_ppd_name, CNCL_FILE_TAG_CAPABILITY, (int *)CNCL_DECODE_EXEC, &xmlBuf );
+
+		unsigned short hostEnv = 0;
+		hostEnv = ParseCapabilityResponsePrint_HostEnv( xmlBuf, xmlBufSize );
+
+		/* Set JobID */
+		strncpy( jobID, CN_START_JOBID2, sizeof(CN_START_JOBID2) );
+
+		/* Allocate Buffer */
+		bufSize = sizeof(char) * CN_BUFSIZE;
+
+		if ( (bufTop = malloc( bufSize )) == NULL ) goto onErr2;
+
+		/* Write StartJob Command */
+		int ret = 0;
+		ret = MakeCommand_StartJob3( hostEnv, uuid, jobID, bufTop, bufSize, &writtenSize );
+
+		if ( ret != 0 ) {
+			fprintf( stderr, "Error in CNCL_GetPrintCommand\n" );
+			goto onErr2;
+		}
+
+		/* WriteData */
+		if ( (retSize = write( 1, bufTop, writtenSize )) != writtenSize ) goto onErr2;
+
+
+		char dateTime[15];
+		memset(dateTime, '\0', sizeof(dateTime));
+
+		ret = ParseCapabilityResponsePrint_DateTime( xmlBuf, xmlBufSize );
+
+		if( ret == 2 ){
+			time_t timer = time(NULL);
+			struct tm *date = localtime(&timer);
+
+			sprintf(dateTime, "%d%02d%02d%02d%02d%02d",
+				date->tm_year+1900, date->tm_mon+1, date->tm_mday,
+				date->tm_hour, date->tm_min, date->tm_sec);
+
+			if ( (tmpBuf = malloc( bufSize )) == NULL ) goto onErr2;
+
+			ret = MakeCommand_SetJobConfiguration( jobID, dateTime, tmpBuf, bufSize, &writtenSize );
+
+			/* WriteData */
+			if ( (retSize = write( 1, tmpBuf, writtenSize )) != writtenSize ) goto onErr2;
+
+			// writtenSize += tmpWrittenSize;
+		}
+	}
+	else{
+		/* Set JobID */
+		strncpy( jobID, CN_START_JOBID, sizeof(CN_START_JOBID) );
+
+		/* OutputSetTime */
+		if ( OutputSetTime( 1, jobID ) != 0 ) goto onErr2;
+
+
+		/* Allocate Buffer */
+		bufSize = sizeof(char) * CN_BUFSIZE;
+		if ( (bufTop = malloc( bufSize )) == NULL ) goto onErr2;
+
+		/* Write StartJob Command */
+		if ( GETPRINTCOMMAND( bufTop, bufSize, &writtenSize_long, jobID, CNCL_COMMAND_START1 ) != 0 ) {
+			fprintf( stderr, "Error in CNCL_GetPrintCommand\n" );
+			goto onErr2;
+
+		}
+
+		/* WriteData */
+		if ( (retSize = write( 1, bufTop, writtenSize_long )) != writtenSize_long ) goto onErr2;
+	}
 
 	/* Write SetConfiguration Command */
-	if ( (xmlBufSize = GETSTRINGWITHTAGFROMFILE( p_ppd_name, CNCL_FILE_TAG_CAPABILITY, CNCL_DECODE_EXEC, &xmlBuf )) < 0 ){
+	if ( (xmlBufSize = GETSTRINGWITHTAGFROMFILE( p_ppd_name, CNCL_FILE_TAG_CAPABILITY, (int*)CNCL_DECODE_EXEC, &xmlBuf )) < 0 ){
 		DEBUG_PRINT2( "[tocanonij] p_ppd_name : %s\n", p_ppd_name );
 		DEBUG_PRINT2( "[tocanonij] xmlBufSize : %d\n", xmlBufSize );
 		fprintf( stderr, "Error in CNCL_GetStringWithTagFromFile\n" );
 		goto onErr3;
 	}
 
-	if ( GETSETCONFIGURATIONCOMMAND( &Settings, jobID, bufSize, (void *)xmlBuf, xmlBufSize, bufTop, &writtenSize ) != 0 ){
+	if ( GETSETCONFIGURATIONCOMMAND( &Settings, jobID, bufSize, (void *)xmlBuf, xmlBufSize, bufTop, &writtenSize_long ) != 0 ){
 		fprintf( stderr, "Error in CNCL_GetSetConfigurationCommand\n" );
 		goto onErr3;
 	}
 	/* WriteData */
-	retSize = write( 1, bufTop, writtenSize );
+	retSize = write( 1, bufTop, writtenSize_long );
 
 	/* Write Page Data */
 	while ( 1 ) {
@@ -480,26 +607,26 @@ int main( int argc, char *argv[] )
 		else {
 			next_page = CNCL_PSET_NEXTPAGE_OFF;
 		}
-		if ( GETSETPAGECONFIGUARTIONCOMMAND( jobID, next_page, bufTop, bufSize, &writtenSize ) != 0 ) {
+		if ( GETSETPAGECONFIGUARTIONCOMMAND( jobID, next_page, bufTop, bufSize, &writtenSize_long ) != 0 ) {
 			fprintf( stderr, "Error in CNCL_GetPrintCommand\n" );
 			goto onErr3;
 		}
 		/* WriteData */
-		if ( (retSize = write( 1, bufTop, writtenSize )) != writtenSize ) goto onErr3;
+		if ( (retSize = write( 1, bufTop, writtenSize_long )) != writtenSize_long ) goto onErr3;
 
 		/* Write SendData Command */
 		memset(	bufTop, 0x00, bufSize );
 		readSize = CNData.image_size;
-		if ( GETSENDDATAPWGRASTERCOMMAND( jobID, readSize, bufSize, bufTop, &writtenSize ) != 0 ) {
+		if ( GETSENDDATAPWGRASTERCOMMAND( jobID, readSize, bufSize, bufTop, &writtenSize_long ) != 0 ) {
 			DEBUG_PRINT( "Error in CNCL_GetSendDataJPEGCommand\n" );
 			goto onErr3;
 		}
 		/* WriteData */
-		retSize = write( 1, bufTop, writtenSize );
+		retSize = write( 1, bufTop, writtenSize_long );
 
 		while( readSize ){
 			pCurrent = bufTop;
-	
+
 			if ( readSize - bufSize > 0 ){
 				readBytes = read( fd, bufTop, bufSize );
 				DEBUG_PRINT2( "[tocanonij] PASS tocanonij READ1<%d>\n", readBytes );
@@ -532,13 +659,13 @@ int main( int argc, char *argv[] )
 	}
 
 	/* CNCL_GetPrintCommand */
-	if ( GETPRINTCOMMAND( bufTop, bufSize, &writtenSize, jobID, CNCL_COMMAND_END ) != 0 ) {
+	if ( GETPRINTCOMMAND( bufTop, bufSize, &writtenSize_long, jobID, CNCL_COMMAND_END ) != 0 ) {
 		DEBUG_PRINT( "Error in CNCL_GetPrintCommand\n" );
 		goto onErr3;
 
 	}
 	/* WriteData */
-	retSize = write( 1, bufTop, writtenSize );
+	retSize = write( 1, bufTop, writtenSize_long );
 	DEBUG_PRINT( "[tocanonij] to_cnijf <end>\n" );
 
 	result = 0;
@@ -551,10 +678,14 @@ onErr2:
 	if ( bufTop != NULL ){
 		free( bufTop );
 	}
-	
+
 onErr1:
 	if ( libclss != NULL ) {
 		dlclose( libclss );
+	}
+
+	if( tmpBuf != NULL ){
+		free(tmpBuf);
 	}
 	return result;
 }
