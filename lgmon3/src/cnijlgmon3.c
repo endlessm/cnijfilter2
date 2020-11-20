@@ -55,7 +55,7 @@ int (*GET_RESPONSE)(char *, int, int *, char *, int **);
 int (*GET_STATUS)(char *, int, int *, int * , char *);
 int (*GET_STATUS2)(char *, int, char *, int *, int * , char *, char *);
 int (*GET_STATUS2_MAINTENANCE)(char *, int, char *, int *, int * , char *, char *);
-int (*GET_PROTOCOL)(char *, size_t);
+static int (*GET_PROTOCOL)(char *, size_t);
 
 
  int main(int argc, char *argv[])
